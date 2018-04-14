@@ -1,0 +1,256 @@
+---
+output: _output.yaml
+---
+
+## {data-background="images/import.png"}
+
+## Agenda
+
+<hr>
+
+- read data from flat or delimited files
+- read data from excel spreadsheets
+- read data from other statistical softwares
+- specify column/variable types
+- read specific columns/variables 
+
+## Libraries
+
+<hr>
+
+```{r importlib1,eval=FALSE}
+library(readr)
+library(readxl)
+library(haven)
+```
+
+```{r importlib2, echo=FALSE, eval=TRUE, results='hide', message=FALSE}
+library(readr)
+library(readxl)
+library(haven)
+```
+
+## {data-background="images/csv_file.png"}
+
+## {data-background="images/semi_colon_file.png"}
+
+## {data-background="images/space_file.png"}
+
+## {data-background="images/tab_file.png"}
+
+## CSV 
+
+<hr>
+
+```{r import2, echo=TRUE, results='markup', message=FALSE}
+read_csv('data/mtcars.csv')
+```
+
+## CSV 
+
+<hr>
+
+```{r import2a, echo=TRUE, results='markup', message=FALSE}
+read_delim('data/mtcars.csv', delim = ",")
+```
+
+## {data-background="images/columns_names.png"}
+
+## Column Names 
+
+<hr>
+
+```{r import4a, echo=TRUE, results='markup', message=FALSE}
+read_csv('data/mtcars1.csv')
+```
+
+## Column Names 
+
+<hr>
+
+```{r import4, echo=TRUE, results='markup', message=FALSE}
+read_csv('data/mtcars1.csv', col_names = FALSE)
+```
+
+## {data-background="images/mtcars_skip_lines_file.png"}
+
+## Skip Lines 
+
+<hr>
+
+```{r import6a, echo=TRUE, results='markup', message=FALSE}
+read_csv('data/mtcars2.csv')
+```
+
+## Skip Lines 
+
+<hr>
+
+```{r import6, echo=TRUE, results='markup', message=FALSE}
+read_csv('data/mtcars2.csv', skip = 19)
+```
+
+## Maximum Lines 
+
+<hr>
+
+```{r import8, echo=TRUE, results='markup', message=FALSE}
+read_csv('data/mtcars.csv', n_max = 20)
+```
+
+## {data-background="images/column_types_list_canva.png"}
+
+## Column Types
+
+<hr>
+
+```{r import55, echo=TRUE, results='markup', message=FALSE}
+spec_csv('data/mtcars5.csv')
+```
+
+## {data-background="images/column_objective_canva.png"}
+
+## Column Types 
+
+<hr>
+
+```{r import10, echo=TRUE, results='markup', message=FALSE}
+read_csv('data/mtcars5.csv', 
+         col_types = list(col_double(), col_factor(levels = c(4, 6, 8)),
+                          col_double(), col_integer()))
+```
+
+## Skip Columns
+
+<hr>
+
+```{r import10a, echo=TRUE, results='markup', message=FALSE}
+read_csv('data/mtcars5.csv', 
+         col_types = list(col_double(), col_factor(levels = c(4, 6, 8)),
+                          col_skip(), col_integer()))
+```
+
+
+## Read Specific Columns 
+
+<hr>
+
+```{r import11, echo=TRUE, results='markup', message=FALSE}
+read_csv('data/mtcars5.csv', 
+         col_types = cols_only(mpg = col_double(), 
+                               cyl = col_factor(levels = c(4, 6, 8))))
+```
+
+## {data-background="images/import_funcs.png"}
+
+## Your turn...
+
+<hr>
+
+Open the below files, examine how the values are separated and read them into R
+using the appropriate function listed in the previous slide:
+
+- mtcars.txt
+- mtcars.tsv
+- mtcars3.txt
+- mtcars4.txt
+
+## Spreadsheets
+
+<hr>
+
+- list sheets in an excel file
+- read data from an excel sheet
+- read specific cells
+- read specific rows
+- read specific columns
+
+## List Sheets
+
+<hr>
+
+```{r import55a}
+excel_sheets('data/sample.xls')
+```
+
+## Read Sheet
+
+<hr>
+
+```{r import56, echo=TRUE, results='markup', message=FALSE}
+read_excel('data/sample.xls', sheet = 1)
+```
+
+## {data-background="images/readxl_range_canva.png"}
+
+## Read Specific Cells
+
+<hr>
+
+```{r import58, echo=TRUE, results='markup', message=FALSE}
+read_excel('data/sample.xls', sheet = 1, range = "B1:C4")
+```
+
+## Read Single Column
+
+<hr>
+
+```{r import64, echo=TRUE, results='markup', message=FALSE}
+readxl::read_excel('data/sample.xls', sheet = 1, range = cell_cols(2))
+```
+
+
+## Specific Rows
+
+<hr>
+
+```{r import62, echo=TRUE, results='markup', message=FALSE}
+readxl::read_excel('data/sample.xls', sheet = 1, range = cell_rows(1:4))
+```
+
+## Specific Columns
+
+<hr>
+
+```{r import63, echo=TRUE, results='markup', message=FALSE}
+readxl::read_excel('data/sample.xls', sheet = 1, range = cell_cols(2:3))
+```
+
+
+## Statistical Softwares
+
+<hr>
+
+- SAS
+- SPSS
+- STATA
+
+## STATA
+
+<hr>
+
+```{r import68, echo=TRUE, results='markup', message=FALSE}
+haven::read_stata('data/airline.dta')  
+```
+
+## SPSS
+
+<hr>
+
+```{r import71, echo=TRUE, results='markup', message=FALSE}
+read_spss('data/employee.sav')  
+```
+
+## SAS
+
+<hr>
+
+```{r import73, echo=TRUE, results='markup', message=FALSE}
+read_sas('data/airline.sas7bdat')
+```
+
+## {data-background="images/readxl_functions_summary_canva.png"}
+
+
+## {data-background="images/thankyou.png"}
+
