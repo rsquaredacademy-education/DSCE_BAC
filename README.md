@@ -29,6 +29,20 @@ Below are a list of R packages required for the workshop. In the below
 video, we show how to install the first package. To install the rest of
 the packages, replace the name of the package.
 
+  - readr
+  - readxl
+  - haven
+  - dplyr
+  - ggplot2
+  - magrittr
+  - descriptr
+  - skimr
+  - inferr
+  - olsrr
+  - blorr
+  - rmarkdown
+  - knitr
+
 ### Anaconda
 
 Download and install the Anaconda distribution from their
@@ -54,3 +68,12 @@ Notebook](http://jupyter.org/) for the python session.
       - bokeh
       - plotly
   - Modeling with statsmodels
+
+## Useful Resources
+
+  - [Rstudio Webinars](https://www.rstudio.com/resources/webinars/)
+  - [RStudio Cheat
+    Sheets](https://www.rstudio.com/resources/cheatsheets/)
+  - [tidyverse](https://www.tidyverse.org/)
+  - [R Bloggers](https://www.r-bloggers.com/)
+  - [R Weekly](https://rweekly.org/)
