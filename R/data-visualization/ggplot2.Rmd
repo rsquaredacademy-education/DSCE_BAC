@@ -6,182 +6,292 @@ output: _output.yaml
 
 ## Agenda
 
+<hr>
+
 ## Libraries
 
 <hr>
 
-
 ```{r dplyr1, eval=FALSE}
 library(ggplot2)
 library(readr)
+library(descriptr)
 ```
 
 ```{r libs, echo=FALSE, eval=TRUE, results='hide', message=FALSE}
 library(ggplot2)
 library(readr)
+library(descriptr)
 ```
 
-## create coordinate system
+## Coordinate System
+
+<hr>
 
 ```{r gg1, fig.align='center'}
 ggplot()
 ```
 
-## specify the data set 
+## Data Set
+
+<hr>
+
 ```{r gg2, fig.align='center'}
-ggplot(data = mtcars)
+ggplot(data = mtcarz)
 ```
 
-## geoms
+## Geoms
+
+<hr>
+
 <!-- ## represent relationship using points
 ## map variables in the data to visual properties
 ## x axis represents vehicle displacement
 ## y axis represents mileage
  -->
- ```{r gg3, fig.align='center'}
-ggplot(data = mtcars) + 
+```{r gg3, fig.align='center'}
+ggplot(data = mtcarz) + 
   geom_point(mapping = aes(x = disp, y = mpg))
 ```
 
+## Geoms
+
+<hr>
+
 ```{r gg4, fig.align='center'}
-ggplot(data = mtcars) +
+ggplot(data = mtcarz) +
   geom_histogram(mapping = aes(x = mpg))
 ```
 
+## Geoms
+
+<hr>
 
 ```{r gg5, fig.align='center'}
-ggplot(data = mtcars) +
+ggplot(data = mtcarz) +
   geom_boxplot(mapping = aes(x = cyl, y = mpg))
 ```
 
+## Geoms
+
+<hr>
+
 ```{r gg6, fig.align='center'}
-ggplot(data = mtcars) +
+ggplot(data = mtcarz) +
   geom_bar(mapping = aes(x = cyl))
 ```
 
-## map aesthetics to variables
-## color
-## shape
-## size
-## background color
-## transparency
+## Aesthetics
 
-## color of the point represents number of cylinders
+<hr>
+
+## Color
+
+<hr>
+
+## Shape
+
+<hr>
+
+## Size
+
+<hr>
+
+## Background Color
+
+<hr>
+
+## Transparency
+
+<hr>
+
+## Map Color
+
+<hr>
+
 ```{r gg7, fig.align='center'}
-ggplot(data = mtcars) + 
+ggplot(data = mtcarz) + 
   geom_point(aes(x = disp, y = mpg, color = cyl))
 ```
 
-## shape of the point represents gear
+## Map Shape
+
+<hr>
+
 ```{r gg8, fig.align='center'}
-ggplot(data = mtcars) + 
+ggplot(data = mtcarz) + 
   geom_point(aes(x = disp, y = mpg, shape = factor(gear)))
 ```
 
-## size of the point represents weight
+## Map Size
+
+<hr>
+
 ```{r gg9, fig.align='center'}
-ggplot(data = mtcars) + 
+ggplot(data = mtcarz) + 
   geom_point(aes(x = disp, y = mpg, size = wt))
 ```
 
-## specify values for aesthetics
-## color = blue
+<hr>
+
+## Color = blue
+
+<hr>
+
 ```{r gg10, fig.align='center'}
-ggplot(data = mtcars) + 
+ggplot(data = mtcarz) + 
   geom_point(aes(x = disp, y = mpg), color = "blue")
 ```
 
-## shape = 3
+## Shape = 3
+
+<hr>
+
 ```{r gg11, fig.align='center'}
-ggplot(data = mtcars) + 
+ggplot(data = mtcarz) + 
   geom_point(aes(x = disp, y = mpg), shape = 3)
 ```
 
-## size = 2
+## Size = 2
+
+<hr>
+
 ```{r gg12, fig.align='center'}
-ggplot(data = mtcars) + 
+ggplot(data = mtcarz) + 
   geom_point(aes(x = disp, y = mpg), size = 2)
 ```
 
-## transformations
-## bar chart
+## Transformations
+
+<hr>
+
+## Bar chart
+
+<hr>
+
 ```{r gg13, fig.align='center'}
-ggplot(data = mtcars) +
+ggplot(data = mtcarz) +
   stat_count(mapping = aes(x = cyl))
 ```
 
-## histograms
-## box plots
+## Histograms
 
-## position of the geoms
+<hr>
+
+## Box plots
+
+<hr>
+
+## Position
+
+<hr>
+
 ```{r gg14, fig.align='center'}
-ggplot(data = mtcars) +
+ggplot(data = mtcarz) +
   geom_bar(mapping = aes(x = cyl, fill = factor(gear)))
 ```
 
+## Position
+
+<hr>
+
 ```{r gg15, fig.align='center'}
-ggplot(data = mtcars) +
+ggplot(data = mtcarz) +
   geom_bar(mapping = aes(x = cyl, fill = factor(gear)), position = "dodge")
 ```
 
-## coordinates
+## Flip Coordinates
+
+<hr>
+
 ```{r gg16, fig.align='center'}
-ggplot(data = mtcars) +
+ggplot(data = mtcarz) +
   geom_bar(mapping = aes(x = cyl, fill = factor(gear))) +
   coord_flip()
 ```
 
-## facets
-## split the plot into sub plots each of which 
-## displays a subset of the data
-## examine the relationship between disp and mpg for cyl
+## Facets
+
+<hr>
+
+- split the plot into sub plots each of which 
+- displays a subset of the data
+- examine the relationship between disp and mpg for cyl
+
+## Facets
+
+<hr>
+
 ```{r gg17, fig.align='center'}
-ggplot(data = mtcars) +
+ggplot(data = mtcarz) +
   geom_point(mapping = aes(x = disp, y = mpg)) +
   facet_wrap(~ cyl)
 ```
 
+## Facets
+
+<hr>
+
 ```{r gg18, fig.align='center'}
-ggplot(data = mtcars) +
+ggplot(data = mtcarz) +
   geom_point(mapping = aes(x = disp, y = mpg)) +
   facet_grid(gear ~ cyl)
 ```
 
-## title, axis labels & limits
+## Title, Axis Labels & Limits
+
+<hr>
+
 ```{r gg19, fig.align='center'}
-ggplot(data = mtcars) + 
+ggplot(data = mtcarz) + 
   geom_point(aes(x = disp, y = mpg), color = "blue") +
-  labs(title = "mpg vs disp",
-       x = "Displacement", y = "Miles Per Gallon")
+  labs(title = "mpg vs disp", x = "Displacement", y = "Miles Per Gallon")
 ```
+
+## Title
+
+<hr>
 
 ```{r gg20, fig.align='center'}
-ggplot(data = mtcars) + 
+ggplot(data = mtcarz) + 
   geom_point(aes(x = disp, y = mpg), color = "blue") +
-  ggtitle("mpg vs disp") +
-  xlab("Displacement") + ylab("Miles Per Gallon")
+  ggtitle("mpg vs disp") + xlab("Displacement") + ylab("Miles Per Gallon")
 ```
 
-## axis limits
+## Axis Limits
+
+<hr>
+
 ```{r gg21, fig.align='center'}
-ggplot(data = mtcars) +
+ggplot(data = mtcarz) +
   geom_point(aes(x = disp, y = mpg), color = "blue") +
   xlim(c(0, 600))
 ```
 
+## Axis Limits
+
+<hr>
+
 ```{r gg22, fig.align='center'}
-ggplot(data = mtcars) +
+ggplot(data = mtcarz) +
   geom_point(aes(x = disp, y = mpg), color = "blue") +
   ylim(c(0, 40))
 ```
 
+## Axis Limits
+
+<hr>
+
 ```{r gg23, fig.align='center'}
-ggplot(data = mtcars) +
+ggplot(data = mtcarz) +
   geom_point(aes(x = disp, y = mpg), color = "blue") +
   expand_limits(x = c(0, 600), y = c(0, 40))
 ```
 
-## read data for line chart
+## Line Chart: Data
+
+<hr>
+
 ```{r gg24, echo=FALSE, message=FALSE}
 device <- read_csv("data/users_device.csv",
                    col_types = list(col_date(format = "%m/%d/%y"),
@@ -189,42 +299,54 @@ device <- read_csv("data/users_device.csv",
                                     col_integer()))
 ```
 
-## title
+## Line Chart
+
+<hr>
 
 ```{r gg25, fig.align='center'}
 ggplot(data = device) +
   geom_line(mapping = aes(x = Date, y = Desktop))
 ```
 
-## title
+## Line Color
+
+<hr>
 
 ```{r gg26, fig.align='center'}
 ggplot(data = device) +
   geom_line(mapping = aes(x = Date, y = Desktop), color = "blue")
 ```
 
-## title
+## Line Type
+
+<hr>
 
 ```{r gg27, fig.align='center'}
 ggplot(data = device) +
   geom_line(mapping = aes(x = Date, y = Desktop), linetype = 2)
 ```
 
-## title
+## Line Type
+
+<hr>
 
 ```{r gg28, fig.align='center'}
 ggplot(data = device) +
   geom_line(mapping = aes(x = Date, y = Desktop), linetype = "dashed")
 ```
 
-## title
+## Line Width
+
+<hr>
 
 ```{r gg29, fig.align='center'}
 ggplot(data = device) +
   geom_line(mapping = aes(x = Date, y = Desktop), size = 2)
 ```
 
-## title
+## Multiple Lines
+
+<hr>
 
 ```{r gg30, fig.align='center'}
 ggplot(data = device) +
@@ -232,7 +354,9 @@ ggplot(data = device) +
   geom_line(mapping = aes(x = Date, y = Mobile))
 ```
 
-## title
+## Multiple Lines
+
+<hr>
 
 ```{r gg31, fig.align='center'}
 ggplot(data = device) +
@@ -241,7 +365,9 @@ ggplot(data = device) +
   geom_line(mapping = aes(x = Date, y = Tablet))
 ```
 
-## title
+## Line Chart: Data
+
+<hr>
 
 ```{r gg32, echo=FALSE, message=FALSE}
 tidy_device <- read_csv("data/tidy_users.csv",
@@ -249,7 +375,9 @@ tidy_device <- read_csv("data/tidy_users.csv",
                                          col_character(), col_integer()))
 ```
 
-## title
+## Multiple Lines
+
+<hr>
 
 ```{r gg33, fig.align='center'}
 ggplot(data = tidy_device) +
