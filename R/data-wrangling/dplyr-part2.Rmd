@@ -26,8 +26,6 @@ In this module, we will explore a set of helper functions in order to:
 - extract/mutate data using predicate functions
 - count observations for different levels of a variable
 
-## {data-background="casestudy.png"}
-
 ## Case Study
 
 <hr>
@@ -65,9 +63,6 @@ ecom
 - purchase: whether visitor purchased
 - order_value: order value of visitor (in dollars)
 
-
-## {data-background="sanitization.png"}
-
 ```{r dplyr1, echo=FALSE, eval=TRUE, results='hide', message=FALSE}
 library(dplyr)
 options(tibble.width = Inf)
@@ -79,6 +74,8 @@ options(tibble.width = Inf)
 
 - `distinct()`
 - `rename()`
+
+## {data-background="images/distinct_canva.png"}
 
 ## Traffic Sources
 
@@ -96,6 +93,8 @@ distinct(ecom, referrer)
 distinct(ecom, device)
 ```
 
+## {data-background="images/rename_canva.png"}
+
 ## Rename Columns
 
 <hr>
@@ -104,7 +103,7 @@ distinct(ecom, device)
 rename(ecom, time_on_site = duration)
 ```
 
-## {data-background="sampling.png"}
+## {data-background="images/sampling_canva.png"}
 
 ## Sampling Data
 
@@ -122,7 +121,7 @@ sample_n(ecom, size = 700)
 sample_frac(ecom, size = 0.7)
 ```
 
-## {data-background="extract.png"}
+## {data-background="images/pull_canva.png"}
 
 ## Extract Device Column
 
@@ -148,6 +147,8 @@ pull(ecom, 1)
 pull(ecom, -1)
 ```
 
+## {data-background="images/slice_canva.png"}
+
 ## Extract First 20 Rows
 
 <hr>
@@ -164,7 +165,7 @@ slice(ecom, 1:20)
 slice(ecom, n())
 ```
 
-## {data-background="tabulate.png"}
+## {data-background="images/tally_canva.png"}
 
 ## Tabulate Referrers
 
@@ -215,7 +216,7 @@ ecom %>%
 count(ecom, referrer, purchase)
 ```
 
-## {data-background="sortfilter.png"}
+## {data-background="images/arrange_canva.png"}
 
 ## Top 2 referrers by orders
 

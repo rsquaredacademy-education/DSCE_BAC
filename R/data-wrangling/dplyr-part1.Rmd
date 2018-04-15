@@ -37,7 +37,7 @@ dplyr helps us solve the most common data manipulation challenges such as filter
 
 
 ```{r dplyr1, eval=FALSE}
-library(dplyr)S
+library(dplyr)
 library(readr)
 ```
 
@@ -57,8 +57,6 @@ dplyr provides a set of verbs that help us solve the most common data manipulati
 - `arrange`: re-order or arrange rows according to single/multiple variables
 - `mutate`: create new columns from existing columns
 - `summarise`: reduce data to a single summary
-
-## {data-background="images/casestudy.png"}
 
 ## Case Study
 
@@ -115,7 +113,7 @@ Below is the description of the data set:
 
 ![alt text](J:/workshops/DSCE_BAC/R/data-wrangling/images/image.jpg)
 
-## {data-background="images/aov_flow_canva.png"}
+## {data-background="images/aov_computation_canva.png"}
 
 ## AOV by Devices
 
@@ -133,13 +131,13 @@ ecom %>%
   select(device, aov)
 ```
 
-## {data-background="images/filter.png"}
-
 ## Step 1: Filter Purchasers
 
 <hr>
 
 In order to compute the AOV, we must first separate the purchasers from non-purchasers. We will do this by filtering the data related to purchasers using the `filter()` function. It allows us to filter rows that meet a specific criteria/condition. The first argument is the name of the data frame and the rest of the arguments are expressions for filtering the data. Let us look at a few examples:
+
+## {data-background="images/dplyr_filter_1_canva.png"}
 
 ## Select all visits from mobile
 
@@ -148,6 +146,8 @@ In order to compute the AOV, we must first separate the purchasers from non-purc
 ```{r dplyr2}
 filter(ecom, device == "mobile")
 ```
+
+## {data-background="images/dplyr_filter_2_canva.png"}
 
 ## visits from mobile that converted
 
@@ -173,13 +173,13 @@ filter(ecom, device == "mobile", n_pages > 5)
 filter(ecom, purchase == "true")
 ```
 
-## {data-background="images/select.png"}
-
 ## Step 2: Select relevant columns
 
 <hr>
 
 After filtering the data, we need to select relevent variables to compute the AOV. Remember, we do not need all the columns in the data to compute a required metric (in our case, AOV). The `select()` function allows us to select a subset of columns. The first argument is the name of the data frame and the subsequent arguments specify the columns by name or position. Let us look at a few examples:
+
+## {data-background="images/dplyr_select_1_canva.png"}
 
 ## Select device and purchase columns 
 
@@ -189,6 +189,8 @@ After filtering the data, we need to select relevent variables to compute the AO
 select(ecom, device, purchase)
 ```
 
+## {data-background="images/dplyr_select_2_canva.png"}
+
 ## all columns from device to purchase
 
 <hr> 
@@ -196,6 +198,8 @@ select(ecom, device, purchase)
 ```{r dplyr7}
 select(ecom, device:purchase)
 ```
+
+## {data-background="images/dplyr_select_3_canva.png"}
 
 ## all columns excluding id and country
 
@@ -227,8 +231,6 @@ ecom2 <- select(ecom1, device, order_value, order_items)
 ecom2
 ```
 
-## {data-background="images/group.png"}
-
 ## Step 3: Group data by devices
 
 <hr>
@@ -254,19 +256,20 @@ ecom3 <- group_by(ecom2, device)
 ecom3
 ```
 
-## {data-background="images/summarise.png"}
-
 ## Step 4: Total order value and order items
 
 <hr>
 
 The next step is to compute the total order value and total order items for each device. We will use them to then compute the average order value. Now we need to reduce the order value and order items data to a single summary. We can achieve this using the `summarise()` function. The first argument is the name of a data frame and the subsequent arguments are functions that can generate a summary. For example, we can use `min`, `max`, `sum`, `mean` etc.
 
+## {data-background="images/dplyr_summarize_1_canva.png"}
+
 ## Summarise
 
 <hr>
 
 For our case study, we need the totals of order value and order items. What function can we use to obtain them? The `sum()` function will generate the sum of the values and hence we will use it inside the `summarise()` function. Remember, we need to provide a name to the summary being generated. 
+
 
 ```{r dplyr13}
 ecom4 <- summarise(ecom3, total_value = sum(order_value),
@@ -291,7 +294,7 @@ ecom4 <- summarise_all(ecom3, funs(sum))
 ecom4
 ```
 
-## {data-background="images/mutate.png"}
+## {data-background="images/dplyr_mutate_1_canva.png"}
 
 ## Step 5: Compute AOV
 
@@ -356,9 +359,7 @@ ecom %>%
   select(device, aov)
 ```
 
-## {data-background="images/aov_flow_map_canva.png"}
-
-## {data-background="images/practice.png"}
+## {data-background="images/aov_by_devices_canva.png"}
 
 ## Practice Questions
 
