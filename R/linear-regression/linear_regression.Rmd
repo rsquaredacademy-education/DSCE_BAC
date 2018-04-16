@@ -1,0 +1,214 @@
+---
+output: _output.yaml
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Agenda
+
+<hr>
+
+## Libraries
+
+<hr>
+
+```{r lm1, message=FALSE, results='hide'}
+library(readxl)
+library(caret)
+library(olsrr)
+```
+
+
+## Data
+
+<hr>
+
+```{r lm2}
+housing <- read_excel("data/boston.xls")
+housing
+```
+
+## Data Partition
+
+<hr>
+
+```{r lm3}
+out <- createDataPartition(y = housing$CRIM, p = 0.7, list = FALSE)
+train <- housing[out, ]
+test <- housing[-out, ]
+```
+
+## Regression
+
+<hr>
+
+```{r lm4}
+model <- lm(MV ~ ., data = housing)
+model
+```
+
+## Regression
+
+<hr>
+
+```{r lm5}
+model <- lm(MV ~ ., data = housing)
+summary(model)
+```
+
+## Regression
+
+<hr>
+
+```{r lm6}
+model <- lm(MV ~ ., data = housing)
+ols_regress(model)
+```
+
+## Stepwise Regression
+
+<hr>
+
+```{r lm7}
+model <- lm(MV ~ ., data = housing)
+ols_step_forward_aic(model)
+```
+
+## Stepwise Regression
+
+<hr>
+
+```{r lm8}
+model <- lm(MV ~ ., data = housing)
+ols_step_backward_aic(model)
+```
+
+## Stepwise Regression
+
+<hr>
+
+```{r lm9}
+model <- lm(MV ~ ., data = housing)
+ols_step_both_aic(model)
+```
+
+## Residual Diagnostics
+
+<hr>
+
+```{r lm10, fig.align='center'}
+model <- lm(MV ~ ., data = housing)
+ols_plot_resid_qq(model)
+```
+
+## Residual Diagnostics
+
+<hr>
+
+```{r lm11}
+model <- lm(MV ~ ., data = housing)
+ols_test_normality(model)
+```
+
+## Residual Diagnostics
+
+<hr>
+
+```{r lm12, fig.align='center'}
+model <- lm(MV ~ ., data = housing)
+ols_plot_resid_fit(model)
+```
+
+## Residual Diagnostics
+
+<hr>
+
+```{r lm13, fig.align='center'}
+model <- lm(MV ~ ., data = housing)
+ols_plot_resid_hist(model)
+```
+
+## Collinearity Diagnostics
+
+<hr>
+
+```{r lm14}
+model <- lm(MV ~ ., data = housing)
+ols_coll_diag(model)
+```
+
+## Part & Partial Correlations
+
+<hr>
+
+```{r lm15}
+model <- lm(MV ~ ., data = housing)
+ols_correlations(model)
+```
+
+## Heteroskedasticity
+
+<hr>
+
+```{r lm16}
+model <- lm(MV ~ ., data = housing)
+ols_test_breusch_pagan(model)
+```
+
+
+## Heteroskedasticity
+
+<hr>
+
+```{r lm17}
+model <- lm(MV ~ ., data = housing)
+ols_test_score(model)
+```
+
+
+## Heteroskedasticity
+
+<hr>
+
+```{r lm18}
+model <- lm(MV ~ ., data = housing)
+ols_test_f(model)
+```
+
+## Measures of Influence
+
+<hr>
+
+```{r lm19, fig.align='center'}
+model <- lm(MV ~ ., data = housing)
+ols_plot_cooksd_bar(model)
+```
+
+## Measures of Influence
+
+<hr>
+
+```{r lm20, fig.align='center'}
+model <- lm(MV ~ ., data = housing)
+ols_plot_dffits(model)
+```
+
+## Measures of Influence
+
+<hr>
+
+```{r lm21, fig.align='center'}
+model <- lm(MV ~ ., data = housing)
+ols_plot_resid_stand(model)
+```
+
+## Measures of Influence
+
+<hr>
+
+```{r lm22, fig.align='center'}
+model <- lm(MV ~ ., data = housing)
+ols_plot_resid_lev(model)
+```

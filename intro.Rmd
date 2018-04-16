@@ -1,5 +1,8 @@
 ---
-output: github_document
+title: "Introduction"
+author: "Aravind Hebbali"
+date: "16 April 2018"
+output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
@@ -46,11 +49,12 @@ Below are a list of R packages required for the workshop.
 - rmarkdown
 - knitr
 - devtools
-- skimr
+- blorr
+- caret
 
 You can install the packages by running the following code in R:
 
-```{r install}
+```{r install, eval=FALSE}
 install.packages("package_name")
 ```
 

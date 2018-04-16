@@ -1,0 +1,2432 @@
+---
+title: "R Workshop"
+output: 
+  pdf_document:
+  toc: true
+  toc_depth: 1
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Importing Data into R - Part 1
+
+## Introduction
+
+In this chapter, we will focus on 
+
+- reading data from flat or delimited files
+- specifying column data types
+- reading specific columns only
+
+## Libraries, Data & Code
+
+We will use the [readr](http://readr.tidyverse.org/index.html) package. The data sets can be downloaded from [here](https://github.com/rsquaredacademy/datasets) and the codes from [here](https://gist.github.com/aravindhebbali/ade2338fd725438f57345e6bd0bccfac).
+
+```{r library, message=FALSE}
+library(readr)
+```
+
+## Overview
+
+<center>
+![](import_func.png){width=60%}
+</center>
+
+
+The above table gives an overview of the functions for reading different types of files in readr and Base R. All the functions in readr offer a common set of options which are described below. We will learn about them in greater detail in the next section.
+
+- `col_names`: whether data includes column names
+- `n_max`: maximum number of lines/rows to read
+- `col_types`: data type of the columns
+- `skip`: number of lines/rows to skip
+
+## Case Study
+
+In this section, we will read data from a csv (comma separated values) file and explore the options listed in the previous section.   
+```{r csv}
+read_csv('hsb2.csv')
+```
+
+Great! If you see the above output, you have successfully read data into R. In case you get an error, do not worry and do the following:
+
+- check the separator in the file and ensure it is a `comma`
+- check the path to the file
+
+When you read data using readr, it will display the data type detected for each column/variable in the data set. If you want to check the data types before reading the data, use `spec_csv()`. We will learn to specify the column types in the next section.
+
+```{r spec_csv, message=FALSE}
+spec_csv('hsb2.csv')
+```
+
+### Options
+
+#### Column Names
+
+Use `col_names` to indicate whether the data includes column names. It takes two values, `TRUE` and `FALSE`. If set to `FALSE`, readr will generate column names. In the below example, we will read data from a file which does not have column names present in the first row.
+
+```{r col_names, message=FALSE}
+read_csv('hsb3.csv', col_names = FALSE)
+```
+
+`col_names` can be used to specify column names while reading data. We need to store the names as a character vector and supply it to `col_names`. Let us reread `hsb3` and specify column names.
+
+```{r col_names2, message=FALSE}
+cnames <- c("id", "female", "race", "ses", "schtyp", "prog", "read", "write", "math", "science", "socst")
+read_csv('hsb3.csv', col_names = cnames)
+```
+
+
+### Skip Lines
+
+Use `skip` to skip a certain number of lines. For example, if the file has contents other than data in the first few lines, we need to skip them before reading the data. In the below example, we will skip the first 3 lines as they contain information about the data set which we do not need.
+
+```{r skip, message=FALSE}
+read_csv('hsb4.csv', skip = 3)
+```
+
+### Maximum Lines 
+
+Use `n_max` to specify the maximum number of lines to read. Suppose we want to read only 100 rows of data from a file, we can set `n_max` equal to 100. In the next example, we will read the first 120 rows from the `hsb2` file. If you observe the last row in the output, it says `# ... with 110 more rows`, indicating that only 120 rows of data has been read from the file.
+
+```{r n_max, message=FALSE}
+read_csv('hsb2.csv', n_max = 120)
+```
+
+### Column Types
+
+In certain cases, we need to specify the data type of the columns. It might be related to dates or categorical variables. readr allows us to specify the data types using `col_xxx` functions which include:
+
+- `col_double()`
+- `col_integer()`
+- `col_factor()`
+- `col_character()`
+- `col_datetime()`
+
+
+To specify the data types, we will use `col_types` argument and supply to it a list indicating the data type (using `col_xxx`) of each column in the data set. In the below example, we read data from `hsb2` file while sprcifying the data types. Keep in mind that we need to specify the data type for each column. 
+
+```{r col_types}
+read_csv('hsb2.csv', col_types = list(
+  col_integer(), col_factor(levels = c(0, 1)), 
+  col_factor(levels = c(1, 2, 3, 4)), col_factor(levels = c(1, 2, 3)), 
+  col_factor(levels = c(1, 2)), col_factor(levels = c(1, 2, 3)),
+  col_integer(), col_integer(), col_integer(), col_integer(),
+  col_integer())            
+)
+```
+
+### Specific Columns
+
+We may not always want to read all the columns from a file. In such cases, we can specify the columns to be read using `col_types` argument and supplying to it the names of the columns to be read. We will use `cols_only()` to specify the column names and their respective data types.
+
+```{r specific_cols}
+read_csv('hsb2.csv', col_types = cols_only(id = col_integer(),
+  prog = col_factor(levels = c(1, 2, 3)), read = col_integer())
+)
+```
+
+### Practice 
+
+- check the separator type in the following files and read them using appropriate `read_xxx()` function:
+
+    - `hsb.csv`
+    - `mtcars.tsv`
+    - `hsb1.csv`
+    - `hsb.txt`
+
+### Summary
+
+In this chapter, we explored:
+
+- reading data from flat/delimited files
+- reading specific columns
+- specifying 
+    - column data types
+    - number of skipping lines
+    - maximum number of lines to read
+    - if data includes column names
+
+\newpage    
+    
+# Importing Data into R - Part 2
+
+## Introduction
+
+This is the second chapter in the series **Importing Data into R**. In the previous [chapter](), we explored reading data from flat/delimited files. In this chapter, we will:
+
+- list sheets in an excel file
+- read data from an excel sheet
+- read specific cells from an excel sheet
+- read specific rows
+- read specific columns
+- read data from
+		- SAS 
+		- SPSS
+		- STATA
+
+## Libraries, Data & Code
+
+We will use the [readxl](http://readr.tidyverse.org/index.html) package. It has no external dependencies as compared to other packages available for reading data from Excel. The data sets can be downloaded from [here](https://github.com/rsquaredacademy/datasets) and the codes from [here](https://gist.github.com/aravindhebbali/65dc2af57b8eda098f2b878095c5aaa4).
+
+```{r library2, message=FALSE}
+library(readxl)
+```
+
+## List Sheets
+
+Before we read data from an excel file, let us see how many sheets are present using `excel_sheets()`.
+
+```{r list_sheets}
+excel_sheets('sample.xls')
+```
+
+## Read Sheet
+
+To read data from a particular sheet, use `read_excel()` and specify the file name and the sheet number. Below is a simple example:
+
+```{r import56, echo=TRUE, results='markup', message=FALSE}
+read_excel('sample.xls', sheet = 1)
+```
+
+## Read Specific Cells
+
+To read data from specific cells or a range of cells, use the `range` arguments and specify the range of cells from which we want to read data. For example, to read data from first 4 rows of columns **B** and **C**, we will specify the range as `"B1:C4"`.
+
+```{r import58, echo=TRUE, results='markup', message=FALSE}
+read_excel('sample.xls', sheet = 1, range = "B1:C4")
+```
+
+To read data from first 5 rows of columns **A**, **B** and **C**, we will specify the range as `"A1:C5"`.
+
+```{r import59, echo=TRUE, results='markup', message=FALSE}
+readxl::read_excel('sample.xls', sheet = 1, range = "A1:C5")
+```
+
+Another way to read specific cells is by providing a particular cell and then specifying the number of rows and columns keeping that cell as anchorage. In the below example, we want to read 3 rows and 2 columns starting from the cell `A4`.
+
+```{r import61, echo=TRUE, results='markup', message=FALSE}
+readxl::read_excel('sample.xls', sheet = 1, col_names = FALSE,
+  range = anchored("A4", dim = c(3, 2)))
+```
+
+Use cell_limits to specify one end of the rectangle such as top left or top right.
+
+
+```{r import65, echo=TRUE, results='markup', message=FALSE}
+readxl::read_excel('sample.xls', sheet = 1,
+  range = cell_limits(c(1, 2), c(NA, NA)))
+```
+
+```{r import66, echo=TRUE, results='markup', message=FALSE}
+readxl::read_excel('sample.xls', sheet = 1,
+  range = cell_limits(c(1, NA), c(NA, 2)))
+```
+
+## Specify Rows
+
+Use `cell_rows()` to specify the rows from which data must be read. In the below example, we want to read the first 4 rows of data from the file.
+
+```{r import62, echo=TRUE, results='markup', message=FALSE}
+readxl::read_excel('sample.xls', sheet = 1, range = cell_rows(1:4))
+```
+
+## Specify Columns
+
+Use `cell_cols()` to specify the columns from which data must be read. In the below example, we want to read the 2nd and 3rd column from the file.
+
+```{r import63, echo=TRUE, results='markup', message=FALSE}
+readxl::read_excel('sample.xls', sheet = 1, range = cell_cols(2:3))
+```
+
+## Statistical Softwares
+
+We will use the [haven]() package to read data from files of other statistical softwares such as:
+
+- SAS
+- SPSS
+- STATA
+
+### Library
+
+```{r haven, message=FALSE}
+library(haven)
+```
+
+### STATA
+
+```{r import68, echo=TRUE, results='markup', message=FALSE}
+read_stata('airline.dta')  
+```
+
+### SPSS
+
+```{r import71, echo=TRUE, results='markup', message=FALSE}
+read_spss('employee.sav')  
+```
+
+### SAS
+
+```{r import73, echo=TRUE, results='markup', message=FALSE}
+read_sas('airline.sas7bdat')
+```
+
+\newpage
+
+# Data Wrangling with dplyr - Part 1
+
+## Introduction
+
+According to  a [survey](http://visit.crowdflower.com/rs/416-ZBE-142/images/CrowdFlower_DataScienceReport_2016.pdf) by [CrowdFlower](https://www.crowdflower.com/), data scientists spend most of their 
+time cleaning and manipulating data rather than mining or modeling them for 
+insights. As such, it becomes important to have tools that make data 
+manipulation faster and easier. In today's chapter, we introduce you to 
+[dplyr](http://dplyr.tidyverse.org/), a grammar of data manipulation.
+
+<center>
+<img src = "crowd_flower3.png" width = "800" height = "600">
+</center>
+
+
+## Libraries, Code & Data
+
+We will use the following libraries:
+
+- [dplyr](http://dplyr.tidyverse.org/index.html) 
+- and [readr](http://readr.tidyverse.org/index.html)  
+
+The data sets can be downloaded from [here](https://github.com/rsquaredacademy/datasets) 
+and the codes from [here](https://gist.github.com/aravindhebbali/7758b86c2bc13ff1e5d88d9d1c204f8c).
+
+```{r libs3, message=FALSE}
+library(dplyr)
+library(readr)
+```
+
+## dplyr Verbs
+
+dplyr provides a set of verbs that help us solve the most common data 
+manipulation challenges while working with tabular data (dataframes, tibbles):
+
+- `select`: returns subset of columns
+- `filter`: returns a subset of rows
+- `arrange`: re-order or arrange rows according to single/multiple variables
+- `mutate`: create new columns from existing columns
+- `summarise`: reduce data to a single summary
+
+## Case Study
+
+We will explore a dummy data set that resembles web logs of an online retail 
+company. You can download the data from [here](https://github.com/rsquaredacademy/datasets/blob/master/web.csv) 
+or import it directly using `read_csv()` from the [readr](readr.tidyverse.org) 
+package. We will use dplyr to answer the following:
+
+- what is the average order value by device types?
+- what is the average number of pages visited by purchasers and non-purchasers?
+- what is the average time on site for purchasers vs non-purchasers?
+- what is the average number of pages visited by purchasers and non-purchasers 
+using mobile?
+
+## Data
+
+```{r show, message=FALSE}
+ecom <- readr::read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv')
+ecom
+```
+
+###### Data Dictionary
+
+Below is the description of the data set:
+
+- id: row id
+- referrer: referrer website/search engine
+- os: operating system
+- browser: browser
+- device: device used to visit the website
+- n_pages: number of pages visited
+- duration: time spent on the website (in seconds)
+- repeat: frequency of visits
+- country: country of origin
+- purchase: whether visitor purchased
+- order_value: order value of visitor (in dollars)
+
+## Average Order Value
+
+<center>
+<img src = "image.jpg" width = "800" height = "600">
+</center>
+
+## AOV by Devices
+
+<center>
+<img src = "aov_flow_canva.png" width = "800" height = "600">
+</center>
+
+
+```{r case}
+ecom %>%
+  filter(purchase == 'true') %>%
+  select(device, order_value, order_items) %>%
+  group_by(device) %>%
+  summarise_all(funs(sum)) %>%
+  mutate(
+    aov = order_value / order_items
+  ) %>%
+  select(device, aov)
+```
+
+## Syntax
+
+Before we start exploring the dplyr verbs, let us look at their syntax:
+
+- the first argument is always a `data.frame` or `tibble`
+- the subsequent arguments provide the information required for the verbs to 
+take action
+- the name of columns in the data need not be surrounded by quotes
+
+
+## Filter Rows
+
+In order to compute the AOV, we must first separate the purchasers from 
+non-purchasers. We will do this by filtering the data related to purchasers
+using the `filter()` function. It allows us to filter rows that meet a specific 
+criteria/condition. The first argument is the name of the data frame and the 
+rest of the arguments are expressions for filtering the data. Let us look at a 
+few examples:
+
+The first example we will look at filters all visits from device **mobile**. As 
+we had learnt in the previous section, the first argument is our data set `ecom` 
+and the next argument is the condition for filtering rows.
+
+```{r dplyr2}
+filter(ecom, device == "mobile")
+```
+
+We can specify multiple filtering conditions as well. In the below example, we
+specify two filter conditions:
+
+- visit from device **tablet**
+- resulted in a purchase or conversion
+
+```{r dplyr3}
+filter(ecom, device == "tablet", purchase == "true")
+```
+
+Here is another example where we specify multiple conditions: 
+
+- visit from device **tablet**
+- made a purchase
+- browsed less than 15 pages 
+
+```{r dplyr4}
+filter(ecom, device == "tablet", purchase == "true", n_pages < 15)
+```
+
+##### Case Study
+
+Let us apply what we have learnt to the case study. We want to filter all
+visits that resulted in a purchase. 
+
+```{r dplyr5}
+filter(ecom, purchase == "true")
+```
+
+## Select Columns
+
+After filtering the data, we need to select relevent variables to compute the 
+AOV. Remember, we do not need all the columns in the data to compute a required 
+metric (in our case, AOV). The `select()` function allows us to select a subset 
+of columns. The first argument is the name of the data frame and the subsequent 
+arguments specify the columns by name or position. 
+
+To select the `device` and `purchase` columns, we specify the data set i.e. 
+`ecom` followed by the name of the columns.
+
+```{r dplyr6}
+select(ecom, device, purchase)
+```
+
+We can select a set of columns using `:`. In the below example, we select all 
+the columns starting from `device` up to `purchase`. Remember that we can use `:` only when
+the columns are adjacent to each other in the data set.
+
+```{r dplyr7}
+select(ecom, device:purchase)
+```
+
+What if you want to select all columns except a few? Typing the name of many
+columns can be cumbersome and may also result in spelling errors. We may use `:`
+only if the columns are adjacent to each other but that may not always be
+the case. dplyr allows us to specify columns that need not be
+selected using `-`. In the below example, we select all columns except `id` and 
+`country`. Notice the `-` before both of them.
+
+```{r dplyr8}
+select(ecom, -id, -country)
+```
+
+##### Case Study
+
+For our case study, we need to select the columns `order_value` and `order_items` 
+to calculate the AOV. We also need to select the `device` column as we are 
+computing the AOV for each device type.
+
+```{r dplyr9}
+select(ecom, device, order_value, order_items)
+```
+
+But we want the above data only for purchasers. Let us combine `filter()` and 
+`select()` functions to extract `order_value` and `order_items` only for those
+visis that resulted in a purchase.
+
+```{r dplyr10}
+# filter all visits that resulted in a purchase
+ecom1 <- filter(ecom, purchase == "true")
+
+# select the relevant columns
+ecom2 <- select(ecom1, device, order_value, order_items)
+
+# view data
+ecom2
+```
+
+## Grouping Data
+
+We need to compute the total order value and total order items for each device 
+in order to compute their AOV. To achieve this, we need to group the selected 
+`order_value` and `order_items` by device type. `group_by()` allows us to group 
+or split data based on particular (discrete) variable. The first argument is the 
+name of the data set and the second argument is the name of the column based on 
+which the data will be split. 
+
+To split the data by referrer type, we use `group_by` and specify the data set
+i.e. `ecom` and the column based on which to split the data i.e. `referrer`.
+
+```{r dplyr11}
+group_by(ecom, referrer)
+```
+
+##### Case Study
+
+In the second line in the previous output, you can observe `Groups: referrer [5]`
+. The data is split into 5 groups as the referrer variable has 5 distinct values. 
+For our case study, we need to group the data by `device` type.
+
+```{r dplyr12}
+# split ecom2 by device type
+ecom3 <- group_by(ecom2, device)
+ecom3
+```
+
+## Summarise Data
+
+The next step is to compute the total order value and total order items for each 
+device. i.e. we need to reduce the order value and order items data to a single 
+summary. We can achieve this using `summarise()`. As usual, the first argument 
+is the name of a data set and the subsequent arguments are functions that can 
+summarise data. For example, we can use `min`, `max`, `sum`, `mean` etc.
+
+Let us compute the average number of pages browsed by referrer type:
+
+- split data by `referrer` type
+- compute the average number of pages using `mean`
+
+```{r sumeg}
+# split data by referrer type
+step_1 <- group_by(ecom, referrer)
+
+# compute average number of pages
+step_2 <- summarise(step_1, mean(n_pages))
+step_2
+```
+
+Now let us compute both the `mean` and the `median`.
+
+```{r sumeg2}
+# split data by referrer type
+step_1 <- group_by(ecom, referrer)
+
+# compute average number of pages
+step_2 <- summarise(step_1, mean(n_pages), median(n_pages))
+step_2
+```
+
+Another way to achieve the above result is to use the 
+`summarise_all()` function. How does that work? It generates the specified 
+summary for all the columns in the data set except for the column based on 
+which the data has been grouped or split. So we need to ensure that the data 
+does not have any irrelevant columns.
+
+- split data by `referrer` type
+- select `order_value` and `order_items`
+- compute the average number of pages by applying the `mean` function to all 
+the columns
+
+
+```{r sumall_eg}
+# select relevant columns
+step_1 <- select(ecom, referrer, order_value, order_items)
+
+# split data by referrer type
+step_2 <- group_by(step_1, referrer)
+
+# compute average number of pages
+step_3 <- summarise_all(step_2, funs(mean))
+step_3
+```
+
+Let us compute `mean` and `median` number of pages for each referre type using 
+`summarise_all`.
+
+```{r sumall_eg2}
+# select relevant columns
+step_1 <- select(ecom, referrer, order_value, order_items)
+
+# split data by referrer type
+step_2 <- group_by(step_1, referrer)
+
+# compute mean and median number of pages
+step_3 <- summarise_all(step_2, funs(mean, median))
+step_3
+```
+
+
+##### Case Study
+
+So far, we have split the data based on the `device` type and we have selected 2 
+columns,  `order_value` and `order_items`. We need the sum of order value and 
+order items. What function can we use to obtain them? The `sum()` function will 
+generate the sum of the values and hence we will use it inside the `summarise()` 
+function. Remember, we need to provide a name to the summary being generated. 
+
+```{r dplyr13}
+ecom4 <- summarise(ecom3, total_value = sum(order_value),
+          total_items = sum(order_items))
+ecom4
+```
+
+There you go, we have the total order value and total order items for each 
+device type. If we use `summarise_all()`, it will generate the summary for the 
+selected columns based on the function specified. To specify the functions, we 
+need to use another argument `funs` and it can take any number of valid 
+functions.
+
+```{r dplyr14}
+ecom4 <- summarise_all(ecom3, funs(sum))
+ecom4
+```
+
+## Create Columns
+
+To create a new column, we will use `mutate()`. The first argument is the name 
+of the data set and the subsequent arguments are expressions for creating new 
+columns based out of existing columns. 
+
+Let us add a new column `avg_page_time` i.e. time on site divided by number of
+pages visited.
+
+```{r mutateg}
+# select duration and n_pages from ecom
+mutate_1 <- select(ecom, n_pages, duration)
+mutate(mutate_1, avg_page_time = duration / n_pages)
+```
+
+We can create new columns based on other columns created using `mutate`. Let us 
+create another column `sqrt_avg_page_time` i.e. square root of the average time
+on page using `avg_page_time`.
+
+```{r mutateg2}
+mutate(mutate_1,
+       avg_page_time = duration / n_pages,
+       sqrt_avg_page_time = sqrt(avg_page_time))
+```
+
+##### Case Study
+
+Back to our case study, from the last step we have the total order value and 
+total order items for each device category and can compute the AOV. We will 
+create a new column to store AOV. 
+
+```{r dplyr15}
+ecom5 <- mutate(ecom4, aov = order_value / order_items)
+ecom5
+```
+
+## Select Columns
+
+The last step is to select the relevant columns. We will select the device type 
+and the corresponding aov while getting rid of other columns. Use `select()`
+to extract the relevant columns.
+
+```{r dplyr16}
+ecom6 <- select(ecom5, device, aov)
+ecom6
+```
+
+## Arrange Data
+
+Arranging data in ascending or descending order is one of the most common tasks
+in data manipulation. We can use `arrange` to arrange data by different columns.
+Let us say we want to arrange data by the number of pages browsed.
+
+```{r arrange_eg}
+arrange(ecom, n_pages)
+```
+
+If we want to arrange the data in descending order, we can use `desc()`. Let us 
+arrange the data in descending order.
+
+```{r arrange_eg2}
+arrange(ecom , desc(n_pages))
+```
+
+Data can be arranged by multiple variables as well. Let us arrange data first by 
+number of visits and then by number of pages in a descending order.
+
+```{r arrange_eg3}
+arrange(ecom, n_visit, desc(n_pages))
+```
+
+##### Case Study
+
+If you observe `ecom6`, the `aov` column is arranged in descending order. 
+
+```{r arrange4}
+arrange(ecom6, aov)
+```
+
+## AOV by Devices
+
+Let us combine all the code from the above steps:
+
+```{r dplyr17}
+ecom1 <- filter(ecom, purchase == "true")
+ecom2 <- select(ecom1, device, order_value, order_items)
+ecom3 <- group_by(ecom2, device)
+ecom4 <- summarise_all(ecom3, funs(sum))
+ecom5 <- mutate(ecom4, aov = order_value / order_items)
+ecom6 <- select(ecom5, device, aov)
+ecom7 <- arrange(ecom6, aov)
+ecom7
+```
+
+If you observe, at each step we create a new variable(data frame) and then use 
+it as an input in the next step i.e. the output from one step becomes the input 
+for the next. Can we achieve the final outcome i.e. `ecom7` without creating the 
+intermediate data (ecom1 - ecom6)? Yes, we can. We will use the `%>%` operator 
+to chain the steps and get rid of the intermediate data. 
+
+```{r dplyr18}
+ecom %>%
+  filter(purchase == 'true') %>%
+  select(device, order_value, order_items) %>%
+  group_by(device) %>%
+  summarise_all(funs(sum)) %>%
+  mutate(
+    aov = order_value / order_items
+  ) %>%
+  select(device, aov) %>%
+  arrange(aov)
+```
+
+Below we map the description of each step to dplyr verbs.
+
+<center>
+<img src = "aov_flow_map_canva.png" width = "1200" height = "800">
+</center>
+
+## Your Turn
+
+- what is the average number of pages visited by purchasers and non-purchasers?
+- what is the average time on site for purchasers vs non-purchasers?
+- what is the average number of pages visited by purchasers and non-purchasers using mobile?
+
+\newpage
+
+# Data Wrangling with dplyr - Part 2
+
+## Introduction
+
+In the previous chapter, we learnt to combine tables using dplyr. In this chapter, we will explore a set of 
+helper functions in order to:
+
+- extract unique rows 
+- rename columns
+- sample data
+- extract columns
+- slice rows
+- arrange rows
+- compare tables
+- extract/mutate data using predicate functions
+- count observations for different levels of a variable
+
+## Libraries, Code & Data
+
+We will use the following packages:
+
+- [dplyr](http://dplyr.tidyverse.org/index.html) 
+- [readr](http://readr.tidyverse.org/index.html)  
+
+The data sets can be downloaded from [here](https://github.com/rsquaredacademy/datasets) 
+and the codes from [here](https://gist.github.com/aravindhebbali/55c4f40476028c09949b73af97bb1619).
+
+```{r libs4, message=FALSE}
+library(dplyr)
+library(readr)
+```
+
+## Case Study
+
+Let us look at a case study (e-commerce data) and see how we can use dplyr 
+helper functions to answer questions we have about and to modify/transform the 
+underlying data set. 
+
+### Data
+
+```{r show2, message=FALSE}
+ecom <- readr::read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv')
+ecom
+```
+
+### Data Dictionary
+
+- id: row id
+- referrer: referrer website/search engine
+- os: operating system
+- browser: browser
+- device: device used to visit the website
+- n_pages: number of pages visited
+- duration: time spent on the website (in seconds)
+- repeat: frequency of visits
+- country: country of origin
+- purchase: whether visitor purchased
+- order_value: order value of visitor (in dollars)
+
+## Data Sanitization
+
+Let us ensure that the data is sanitized by checking the sources of traffic
+and devices used to visit the site. We will use `distinct` to examine the
+values in the `referrer` column
+
+```{r dplyr2a}
+ecom %>%
+  distinct(referrer)
+```
+
+and the `device` column as well.
+
+```{r dplyr30}
+ecom %>%
+  distinct(device)
+```
+
+## Data Tabulation
+
+Let us now look at the proportion or share of visits driven by different sources
+of traffic. 
+
+```{r dplyr14a}
+ecom %>%
+  group_by(referrer) %>%
+  tally()
+```
+
+We would also like to know the number of bouncers driven by the different 
+sources of traffic.
+
+```{r dplyr15a}
+ecom %>%
+  group_by(referrer, bouncers) %>%
+  tally()
+```
+
+Let us look at how many conversions happen across different devices.
+
+```{r dplyr25}
+ecom %>%
+  group_by(device, purchase) %>%
+  tally() %>%
+  filter(purchase == 'true')
+```
+
+Another way to extract the above information is by using `count`
+
+```{r dplyr17a}
+ecom %>%
+  count(referrer, purchase) %>%
+  filter(purchase == "true")
+```
+
+## Sampling Data
+
+dplyr offers sampling functions which allow us to specify either the
+number or percentage of observations. `sample_n()` allows sampling a specific
+number of observations.  
+
+```{r dplyr4a}
+ecom %>%
+  sample_n(700)
+```
+
+We can combine the sampling functions with other dplyr functions as shown below 
+where we sample observation after grouping them according to the source of 
+traffic.
+
+```{r dplyr5a}
+ecom %>%
+  group_by(referrer) %>%
+  sample_n(100)
+```
+
+`sample_frac()` allows a specific percentage of observations.
+
+```{r dplyr6a}
+ecom %>%
+  sample_frac(size = 0.7)
+```
+
+## Data Extraction
+
+In the previous chapter, we had observed that dplyr verbs always returned a tibble. What if you want to
+extract a specific column or a bunch of rows but not as a tibble? 
+
+Use `pull` to extract columns either by name or position. It will return a 
+vector. In the below example, we extract the `device` column as a vector. I am 
+using `head` in addition to limit the output printed.
+
+```{r dplyr8a}
+ecom %>%
+  pull(device) %>%
+  head
+```
+
+Let us extract the first column from `ecom` using column position instead of 
+name.
+
+```{r dplyr9a}
+ecom %>%
+  pull(1) %>%
+  head
+```
+
+You can use `-` before the column position to indicate the position in reverse.
+The below example extracts data from the last column.
+
+```{r dplyr10a}
+ecom %>%
+  pull(-1) %>%
+  head
+```
+
+Let us now look at extracting rows using `slice()`. In the below example, we 
+extract data starting from the 5th row and upto the 15th row.
+
+```{r dplyr11a}
+ecom %>%
+  slice(5:15)
+```
+
+Use `n()` inside `slice()` to extract the last row.
+
+```{r dplyr12a}
+ecom %>%
+  slice(n())
+```
+
+## Between
+
+`between()` allows us to test if the values in a column lie between two specific
+values. In the below example, we check how many visits browsed pages between 5 
+and 15.
+
+```{r dplyr19a}
+ecom_sample <-
+  ecom %>%
+  sample_n(30)
+  
+ecom_sample %>%
+  pull(n_pages) %>%
+  between(5, 15) 
+```
+
+## Case When
+
+`case_when()` is an alternative to `if else`. It allows us to lay down the 
+conditions clearly and makes the code more readable. In the below example, we
+create a new column `repeat_visit` from `n_visit` (the number of previous visits).
+
+```{r dplyr20a}
+ecom %>%
+  mutate(
+    repeat_visit = case_when(
+      n_visit > 0 ~ TRUE,
+      TRUE ~ FALSE
+    )
+  ) %>%
+  select(n_visit, repeat_visit) 
+```
+
+\newpage
+
+# Data Visulaization - Introduction
+
+### Introduction
+
+```{r install, echo=FALSE, message=FALSE}
+library(ggplot2)
+```
+
+In this chapter, we will:
+
+- understand the philosophy of Grammar of Graphics
+- explore different aspects of ggplot2
+- learn to build some of the basic plots regularly used for exploring data
+
+[ggplot2](http://ggplot2.tidyverse.org/index.html) is an **awesome** alternative to base R for data visualization. It is based on [The Grammar of Graphics](http://www.springer.com/in/book/9780387245447). In this chapter, we will understand the philosophy behind **ggplot2** and learn to build some of the most frequently used plots for visualizing data. 
+
+### Libraries, Code & Data
+
+We will use the following libraries in this chapter:
+
+- [readr](http://readr.tidyverse.org/)
+- [ggplot2](http://ggplot2.tidyverse.org/)
+
+All the data sets used in this chapter can be found [here](https://github.com/rsquaredacademy/datasets) and code can be downloaded from [here](https://gist.github.com/rsquaredacademy/4bc7327c8e921657f90c5101e14a35a7).
+
+### Grammar of Graphics
+
+Grammar of graphics is a formal system for building plots. The core idea is that any plot can be uniquely described as a combination of
+
+- a dataset
+- a geom
+- a set of mappings
+- a statistic
+- a position adjustment
+- a coordinate system
+- a faceting scheme
+
+### Data
+
+Let us build a scatter plot from scratch using the `mtcars` data. We will build the plot incrementally and understand the above layers. The first step in any data visualization exercise is to identify the data set. In `ggplot2`, we can specify the data set using `ggplot()`.
+
+```{r gg1, fig.align='center', exercise = TRUE, exercise.eval = FALSE, exercise.cap = 'Data'}
+ggplot(data = mtcars) 
+```
+
+If you observe, `ggplot()` does not generate any plot, it just creates a coordinate system. 
+
+### Geom
+
+After specifying the data set, we have to decide how the data will be visualized. We will do this using  `geoms`. It basically details the geometric shapes that must be used to display the data. In our case, we want the data to displayed as `points`. 
+
+There are several `geoms` and we will explore them one by one. For the time time being, let us use `geom_point()`. This tells ggplot2 it must use points to represent the data. The next step is to specify the variables that will be represented by the `X` and `Y` axis. To do this we will use `mapping` and `aes`. 
+
+`aes` is the short for aesthetics. Using `mapping`, we can map variables to aesthetics. We specify the aesthetic type and the corresponding variable within `aes`.In our example, we want the `X` axis to be represented by `disp` and `Y` axis by `mpg`. ggplot2 will search for these variables in the data we have provided in `ggplot` which is `mtcars`. If ggplot2 can't find the variables, it will return an error.
+
+So far we have provided:
+
+- data set
+- geometric shape to represent data
+- variables to represent `X` and `Y` axis
+
+The above layers are the bare minimum required to create a plot in ggplot2.
+
+```{r gg2, fig.width=6, fig.height=5, fig.align='center'}
+ggplot(data = mtcars) +
+  geom_point(mapping = aes(x = disp, y = mpg))
+```
+
+### Aesthetics
+
+Aestheics are the visual properties of the objects in the plot. We can display the geometric object in different ways by changing the values of its aesthetic properties such as:
+
+- shape
+- size
+- color
+- opaqueness
+
+Let us modify the appearance of the scatter plot by changing the following:
+
+\newpage    
+
+#### Color
+
+```{r gg3, fig.width=6, fig.height=5, fig.align='center'}
+ggplot(data = mtcars) +
+  geom_point(mapping = aes(x = disp, y = mpg, color = cyl))
+```
+
+\newpage    
+
+#### Shape
+
+```{r gg4, fig.width=6, fig.height=5, fig.align='center'}
+ggplot(data = mtcars) +
+  geom_point(mapping = aes(x = disp, y = mpg, shape = factor(gear)))
+```
+
+\newpage    
+
+#### Size
+
+```{r gg5, fig.width=6, fig.height=5, fig.align='center'}
+ggplot(data = mtcars) +
+  geom_point(mapping = aes(x = disp, y = mpg, size = hp))
+```
+
+### Stat
+
+Some graphs plot the raw data set, but others like bar plot, box plot and histograms compute new values and plot them. In this section, we will look at how the data is transformed before representing them 
+in a plot.
+\newpage    
+
+#### Plot unique values
+
+Let us say we want to remove duplicates from the scatter plot. We can use `stat_unique()` which
+removes duplicate values before plotting the data.
+
+```{r gg6, fig.width=6, fig.height=5, fig.align='center'}
+ggplot(data = mtcars) +
+  geom_point(mapping = aes(x = disp, y = mpg), stat = "unique")
+```			
+
+### Position
+
+Sometimes the geoms tend to overlap each other. In such cases, we might want to reposition them to
+aid better visualization. In this section, we will learn to adjust the position of the geoms using:
+
+- `position_dodge`
+- `position_identity`
+- `position_jitter`
+- `position_fill`
+
+### Coordinate System
+
+The default coordinate system of ggplot2 is the cartesian coordinate system. In this section, 
+we will learn to tweak the system using different functions such as: 
+
+- `coord_flip`
+- `coord_polar`
+
+### Facet
+
+Faceting allows us to generate multiple visualizations for different subsets of data. In 
+this section, we will generate multiple plots using:
+
+- `facet_grid`
+- `facet_wrap`
+
+### Summary
+
+In this chapter, we learnt 
+
+- about grammar of graphics
+- the components of a plot/chart
+- how to build a plot step by step 
+
+### Up Next..
+
+In the next chapter, we will learn to quickly build a set of plots/charts that are routinely used in exploring data.
+
+\newpage
+
+# Data Visulaization - Geoms
+
+### Introduction
+
+In the previous chapter, we learnt how to create plots using the `qplot()` function. In this chapter, we will create some of the most routinely used plots to explore data using the `geom_*` functions. 
+
+```{r geoms1, echo=FALSE, eval=TRUE, results='hide', message=FALSE}
+library(ggplot2)
+library(dplyr)
+library(readr)
+library(tibble)
+```
+
+### Libraries, Code & Data
+
+We will use the following libraries in this chapter:
+
+- [readr](https://readr.tidyverse.org/)
+- [ggplot2](https://ggplot2.tidyverse.org/)
+- [tibble](https://tibble.tidyverse.org/)
+- [dplyr](https://dplyr.tidyverse.org/)
+
+All the data sets used in this chapter can be found [here](https://github.com/rsquaredacademy/datasets) and code can be downloaded from [here](https://gist.github.com/rsquaredacademy/2d0d5d5b60d0ef0f4d1b227c8fb0335d).
+
+### Data
+
+```{r use, eval=TRUE, message=FALSE}
+ecom <- readr::read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv')
+ecom
+```
+
+#### Data Dictionary
+
+- id: row id
+- referrer: referrer website/search engine
+- os: operating system
+- browser: browser
+- device: device used to visit the website
+- n_pages: number of pages visited
+- duration: time spent on the website (in seconds)
+- repeat: frequency of visits
+- country: country of origin
+- purchase: whether visitor purchased
+- order_value: order value of visitor (in dollars)
+
+### Scatter Plot
+
+A scatter plot displays the relationship between two continuous variables. In ggplot2, we can build a scatter plot using `geom_point()`. Scatterplots can show you visually:
+
+- the strength of the relationship between the variables 
+- the direction of the relationship between the variables 
+- and whether outliers exist
+
+\newpage    
+
+#### Point
+
+```{r geoms2b, fig.align='center'}
+ggplot(mtcars, aes(x = disp, y = mpg)) + 
+  geom_point()
+```
+
+#### Horizontal/Vertical Lines
+
+Add horizontal or vertical lines using:
+
+- `geom_hline()`
+- `geom_vline()`
+
+\newpage    
+
+To add a horizontal line, we need to specify the location on the Y axis where 
+the line will be drawn. Use `yintercept` to specify the location of the line.
+
+```{r geoms4b, fig.align='center'}
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point() +
+  geom_hline(yintercept = 30) 
+```
+
+\newpage    
+
+For the vertical line, we need to specify the location on the X axis using 
+`xintercept`.
+
+```{r geoms3b, fig.align='center'}
+ggplot(mtcars, aes(x = wt, y = mpg)) +
+  geom_point() +
+  geom_vline(xintercept = 5) 
+```
+
+\newpage    
+
+#### Bar Plot
+
+Bar plots present grouped data with rectangular bars. The bars may represent the frequency of the groups or values. Bar plots can be: 
+
+- horizontal 
+- vertical
+- grouped
+- stacked 
+- proportional
+
+\newpage    
+
+Let us build a simple bar plot to visualize the traffic driven by different device types.
+
+```{r geoms8b, fig.align='center'}
+ggplot(ecom, aes(x = factor(device))) +
+  geom_bar()
+```
+
+Instead of the frequency of visits, we can visualize the order value driven by the 
+different devices. Use the `weight` argument within `aes` to indicate that the bars 
+should represent the variable specified and not the frequency.
+
+\newpage    
+
+```{r geoms9b, fig.align='center'}
+ggplot(ecom, aes(x = factor(device))) +
+  geom_bar(aes(weight = order_value))
+```
+
+\newpage    
+
+To view the proportion of purchasers and non-purchasers for each device type, we will
+map `fill` to `purchase`. The color of the bar represents purchasers and non-purchasers.
+
+```{r geoms10b, fig.align='center'}
+ggplot(ecom, aes(x = factor(device))) +
+  geom_bar(aes(fill = purchase))
+```
+
+#### Columns
+
+In some instances, we do not have access to the raw data and are provided summaries or 
+transformed data. In the below example, we have data that summarizes the visits from 
+each device type. Such data can be visualized using `geom_col()`. 
+
+\newpage    
+
+```{r geoms12b, fig.align='center', fig.height=4}
+device <- c('laptop', 'mobile', 'tablet')
+visits <- c(30000, 12000, 5000)
+traffic <- tibble::tibble(device, visits)
+ggplot(traffic, aes(x = device, y = visits)) +
+  geom_col(fill = 'blue') 
+```
+
+#### Boxplot
+
+Box plots can be used to:
+
+- examine the distribution of a variable  
+- detect outliers, boxplots are very handy
+
+\newpage    
+
+`geom_boxplot()` is used to create box plots. 
+
+```{r geoms13b, fig.align='center'}
+ggplot(ecom, aes(x = factor(device), y = n_pages)) +
+  geom_boxplot()
+```
+
+\newpage    
+
+We must specify both the `x` and `y` aesthetic. If you are not comparing the distribution
+across groups, use the below method to generate the box plot.
+
+```{r geoms13a, fig.align='center'}
+ggplot(ecom, aes(x = factor(1), y = n_pages)) +
+  geom_boxplot()
+```
+
+#### Histogram
+
+Histograms are used to examine:
+
+- distribution of a continuous variable
+- skewness and kurtosis
+
+\newpage    
+
+We can create a histogram using `geom_histogram()`. Only the `x` aesthetic needs to be supplied.
+
+```{r geoms15b, fig.align='center'}
+ggplot(ecom, aes(x = duration)) +
+  geom_histogram()
+```
+
+\newpage    
+
+The default number of bins used is 30 which may not be helpful always. Use `bins` argument 
+to specify the appropriate number of bins for the histogram.
+
+```{r geoms16b, fig.align='center'}
+ggplot(ecom, aes(x = duration)) +
+  geom_histogram(bins = 5)
+```
+
+#### Line
+
+Line charts are used to examine trends over time.
+
+#### Data
+
+```{r import2b, eval=TRUE, message=FALSE}
+gdp <- readr::read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/gdp.csv')
+gdp
+```
+
+\newpage    
+
+Use `geom_line()` to create line plots.
+
+```{r geomline1, fig.align='center'}
+ggplot(gdp, aes(year, india)) +
+  geom_line()
+```
+
+The following can be modified to improve the appearance of the line:
+
+- `color`
+- `size`
+- `linetype` 
+
+\newpage    
+
+In the below example, we modify the color and type of the line.
+
+```{r geomline2, fig.align='center'}
+ggplot(gdp, aes(year, india)) +
+  geom_line(color = 'blue', linetype = 'dashed')
+```
+
+\newpage    
+
+#### Label
+
+Labels can be added to identify data points using `geom_label()`.
+
+```{r geoms20b, fig.align='center'}
+ggplot(mtcars, aes(disp, mpg, label = rownames(mtcars))) +
+  geom_label()
+```
+
+#### Text
+
+Use `geom_text()` to add text to the plot. We can modify the size of the text 
+and ensure that they do not overlap using `check_overlap` argument.
+
+\newpage    
+
+```{r geoms19b, fig.align='center'}
+ggplot(mtcars, aes(disp, mpg, label = rownames(mtcars))) +
+  geom_text(check_overlap = TRUE, size = 2)
+```
+
+In the below example, we: 
+
+- map the color of the text to `cyl` variable 
+- nudge the text to avoid overlapping with the points
+- and change the horizontal justification, size and angle of text
+
+\newpage    
+
+```{r geoms21b, fig.align='center'}
+ggplot(mtcars, aes(x = disp, y = mpg, label = rownames(mtcars))) +
+  geom_point() + 
+  geom_text(aes(color = cyl), hjust = 0, nudge_x = 0.05, 
+            size = 2, angle = 45)
+```
+
+### Summary 
+
+In this chapter, we learnt to build different types of plots using `geom_*` instead of `qplot()`.
+
+### Up Next..
+
+In the next chapter, we will learn about aesthetics.
+
+\newpage
+
+# Data Visulaization - Title & Axis Labels
+
+### Introduction
+
+In the previous chapter, we learnt about aesthetics. In this chapter, we will learn to:
+
+- add title and subtitle to the plot
+- modify axis labels
+- modify axis range
+
+```{r axis1, echo=FALSE, eval=TRUE, results='hide', message=FALSE}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+```
+
+\newpage    
+
+#### Title & Subtitle
+
+Let us create a simple scatter plot with which we will work in the rest of the chapter.
+
+```{r axis2, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg))
+```
+
+There are two ways to add title to a plot:
+
+- `ggtitle()`
+- `labs()`
+
+#### ggtitle()
+
+Let us explore the `ggtitle()` function first. It takes two arguments:
+
+- label: title of the plot
+- subtitle: subtitle of the plot
+
+\newpage    
+
+##### Title & Subtitle
+
+```{r axis3, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) +
+  ggtitle(label = 'Displacement vs Mileage', subtitle = 'disp vs mpg')
+```
+
+#### Axis Labels
+
+You can add labels to the axis using:
+
+- `xlab()`
+- `ylab()`
+- `labs()`
+
+\newpage    
+
+Let us add labels using `xlab()` for the X axis and `ylab()` for the Y axis.
+
+```{r axis4, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) +
+  xlab('Displacement') + ylab('Miles Per Gallon')
+```
+
+#### Labs
+
+The `labs()` function can be used to add the following to a plot:
+
+- title
+- subtitle
+- X axis label
+- Y axis label
+
+\newpage    
+
+Let us add title and axis labels using `labs()`.
+
+```{r axis5, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) +
+  labs(title = 'Displacement vs Mileage', subtitle = 'disp vs mpg', 
+    x = 'Displacement', y = 'Miles Per Gallon')
+```
+
+#### Axis Range
+
+In certain scenarios, you may want to modify the range of the axis. In ggplot2, we can achieve this using:
+
+- `xlim()`
+- `ylim()`
+- `expand_limits()`
+
+`xlim()` and `ylim()` take a numeric vector of length 2 as input. `expand_limits()` takes two numeric vectors (each of length 2), one for each axis. In all of the above functions, the first element represents the lower limit and the second element represents the upper limit.
+
+\newpage    
+
+Let us modify the range of the X axis using `xlim()`. The lower limit will be 0 and the upper limit 600.
+
+```{r axis6, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) +
+  xlim(c(0, 600))
+```
+
+\newpage    
+
+The range of the Y axis will be modified using `ylim()`. The lower limit will be 0 and the upper limit will be 40.
+
+```{r axis7, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) +
+  ylim(c(0, 40))
+```
+
+\newpage    
+
+Instead of using `xlim()` and `ylim()`, we can use `expand_limits()` to modify the range of both the X and Y axis. 
+
+```{r axis8, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg)) +
+  expand_limits(x = c(0, 600), y = c(0, 40))
+```
+
+\newpage
+
+# Data Visulaization - Scatter Plots
+
+### Introduction
+
+In the previous chapter, we learnt about text annotations. In this chapter, we will build scatter plots by applying everything we have learnt so far.
+
+- build scatter plots
+- modify point
+    - color
+    - fill
+    - alpha
+    - shape
+    - size
+- fit regression line
+
+```{r scat1, echo=FALSE, eval=TRUE, results='hide', message=FALSE}
+library(ggplot2)
+library(readr)
+```
+
+### Libraries, Code & Data
+
+We will use the following libraries in this chapter:
+
+- [readr](https://readr.tidyverse.org/)
+- [ggplot2](https://ggplot2.tidyverse.org/)
+
+All the data sets used in this chapter can be found [here](https://github.com/rsquaredacademy/datasets) and code can be downloaded from [here]().
+
+\newpage    
+
+### Basic Plot
+
+Let us build a simple scatter plot using the `mtcars` data to examine the relationship 
+between `disp` (diaplacement) and `mpg` (miles per gallon).
+
+```{r scat2, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg))
+```
+
+\newpage    
+
+#### Jitter
+
+```{r scat22, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg), position = 'jitter')
+```
+
+#### Aesthetics
+
+Now let us modify the aesthetics of the points. There are two ways:
+
+- map them to variables using the `aes()` function
+- or specify values
+
+In the next 4 examples, we will 
+
+- map color to a categorical variable
+- map color to a continuous variable
+- specify value for color
+- specify value for color opacity
+
+\newpage    
+
+###### Map Color to Variable (Categorical)
+
+```{r scat4, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, color = factor(cyl)))
+```
+
+\newpage    
+
+###### Map Color to Variable (Continuous)
+
+```{r scat5, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, color = hp))
+```
+
+\newpage    
+
+###### Specify Value for Color
+
+```{r scat6, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg), color = 'blue')
+```
+
+\newpage    
+
+###### Specify Value for Alpha
+
+```{r scat7, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg), color = 'blue', alpha = 0.4)
+```
+
+In the next 2 examples, we will 
+
+- map shape to a variable 
+- specify value for shape
+
+\newpage    
+
+###### Map Shape to Variable
+
+```{r scat8, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, shape = factor(cyl)))
+```
+
+\newpage    
+
+###### Specify Value for Shape
+
+```{r scat9, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg), shape = 3)
+```
+
+In the next 2 examples, we will 
+
+- map size to a variable 
+- specify value for size
+
+\newpage    
+
+###### Map Size to Variable
+
+```{r scat10, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg, size = hp), color = 'blue')
+```
+
+\newpage    
+
+###### Specify Value for Size
+
+```{r scat11, fig.align='center'}
+ggplot(mtcars) +
+  geom_point(aes(disp, mpg), size = 3)
+```
+
+### Regression Line
+
+Most often, after building a scatter plot to examine the relationship between two variables, we fit
+a regression line. In this section, we will learn to fit a line to the scatter plot using:
+
+- `geom_smooth()`
+- `geom_abline()`
+
+\newpage    
+
+In the below example, we fit a regression line using `geom_smooth()`. It takes two arguments:
+
+- `method` 
+- `se`
+
+The `method` argument is used to specify the model type i.e. `lm` or `loess`. 
+
+```{r aes12b, fig.align='center'}
+ggplot(mtcars, aes(disp, mpg)) +
+  geom_point() +
+  geom_smooth(method = 'lm', se = FALSE)
+```
+
+\newpage    
+
+###### Regression Line - Loess Method
+
+```{r aes14b, fig.align='center'}
+ggplot(mtcars, aes(disp, mpg)) +
+  geom_point() +
+  geom_smooth(method = 'loess', se = FALSE)
+```
+
+\newpage    
+
+###### Regression Line - Conf. Interval
+
+The `se` argument  takes logical values i.e. `TRUE` or `FALSE`. If set to `TRUE`, the confidence band for the regression line is drawn.
+
+```{r aes13b, fig.align='center'}
+ggplot(mtcars, aes(disp, mpg)) +
+  geom_point() +
+  geom_smooth(method = 'lm', se = TRUE)
+```
+
+\newpage    
+
+###### Fit Line - Intercept & Slope
+
+We can fit a regression line using `geom_abline()` as well. It takes 2 arguments:
+
+- `slope`
+- `intercept`
+
+We can get the `slope` and `intercept` by building a model using `lm()`.
+
+```{r aes17b, fig.align='center'}
+ggplot(mtcars, aes(disp, mpg)) +
+  geom_point() +
+  geom_abline(slope = 29.59985, intercept = -0.04122)
+```
+
+### Summary
+
+In this chapter, we learnt to:
+
+- build scatter plots
+- map aesthetics to variables
+- modify axis and legend
+- fit regression line
+
+### Up Next..
+
+In the next chapter, we will learn to build line charts.
+
+\newpage
+
+# Data Visulaization - Line Charts
+
+### Introduction
+
+In the previous chapter, we learnt to build scatter plots. In this chapter, we will learn to 
+
+- build 
+    - simple line chart
+    - grouped line chart
+- map aesthetics to variables
+- modify line
+    - color
+    - type
+    - size
+
+
+```{r line, echo=FALSE, eval=TRUE, results='hide', message=FALSE}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+```
+
+### Libraries, Code & Data
+
+We will use the following libraries in this chapter:
+
+- [readr](https://readr.tidyverse.org/)
+- [ggplot2](https://ggplot2.tidyverse.org/)
+
+All the data sets used in this chapter can be found [here](https://github.com/rsquaredacademy/datasets) and code can be downloaded from [here](https://gist.github.com/rsquaredacademy/84b3204eee81d6e804f10a73900809b5).
+
+
+#### Case Study
+
+We will use a data set related to GDP growth rate. You can download it from [here](https://github.com/rsquaredacademy/datasets/blob/master/gdp.csv). It contains GDP (Gross Domestic Product) growth data for the BRICS (Brazil, Russia, India, China, South Africa) for the years 2000 to 2005.
+
+#### Data
+
+```{r import2c, eval=TRUE, message=FALSE}
+gdp <- readr::read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/gdp.csv')
+gdp
+```
+
+\newpage    
+
+#### Line Chart
+
+```{r line100d, fig.align='center'}
+ggplot(gdp, aes(year, india)) +
+  geom_line()
+```
+
+\newpage    
+
+#### Line Color
+
+The color of the line can be modified using the `color` argument in `geom_lin()`.
+
+```{r line1d, fig.align='center'}
+ggplot(gdp, aes(year, india)) +
+  geom_line(color = 'blue')
+```
+
+#### Line Type
+
+- 0 : blank
+- 1 : solid
+- 2 : dashed
+- 3 : dotted
+- 4 : dotdash
+- 5 : longdash
+- 6 : twodash
+
+\newpage    
+
+#### Line Type
+
+The type of line can be specified using `linetype` argument.
+
+```{r line2d, fig.align='center'}
+ggplot(gdp, aes(year, india)) +
+  geom_line(linetype = 2)
+```
+
+\newpage    
+
+#### Line Type (Dashed)
+
+```{r line3d, fig.align='center'}
+ggplot(gdp, aes(year, india)) +
+  geom_line(linetype = 'dashed')
+```
+
+\newpage    
+
+#### Line Size
+
+The width of the line can be specified using the `size` argument.
+
+```{r line4d, fig.align='center'}
+ggplot(gdp, aes(year, india)) +
+  geom_line(size = 2)
+```
+
+\newpage    
+
+#### Modify Data
+
+Now let us map the aesthetics to the variables. The data used in the above example cannot be used as we need a variable with country names. We will use `gather()` function from the `tidyr` package to reshape the data.
+
+```{r line5d, fig.align='center'}
+gdp2 <- 
+  gdp %>% 
+  select(year, growth, india, china) %>% 
+  gather(key = country, value = gdp, -year)
+gdp2
+```
+
+#### Grouped Line Chart
+
+To create multiple lines, we can use the `group` argument and map it to a categorical variable. 
+In the below example, we want to visualize the trend in GDP of different countries. Instead of
+using `geom_line()` multiple times, we map `group` argument to the variable `country` and we can
+visualize the GDP trend for all the countries at once.
+
+\newpage    
+
+```{r line6d, fig.align='center'}
+ggplot(gdp2, aes(year, gdp, group = country)) +
+  geom_line()
+```
+
+We can map aesthetics such as:
+
+- color
+- line type 
+- and line width
+
+to categorical variables. In the next 3 examples, we map color, line type and line width to the
+`country` variable.
+
+\newpage    
+
+###### Map Color to Country
+
+```{r line7d, fig.align='center'}
+ggplot(gdp2, aes(year, gdp, group = country)) +
+  geom_line(aes(color = country))
+```
+
+\newpage    
+
+###### Map Line Type to Country
+
+```{r line8d, fig.align='center'}
+ggplot(gdp2, aes(year, gdp, group = country)) +
+  geom_line(aes(linetype = country))
+```
+
+\newpage    
+
+###### Map Line Width to Country
+
+```{r line9d, fig.align='center'}
+ggplot(gdp2, aes(year, gdp, group = country)) +
+  geom_line(aes(size = country))
+```
+
+### Summary
+
+In this chapter, we learnt to:
+
+- build 
+    - simple line chart
+    - grouped line chart
+- map aesthetics to variables
+- modify line
+    - color
+    - type
+    - size
+
+### Up Next..
+
+In the next chapter, we will learn to build bar plots.
+
+\newpage
+
+# Data Visulaization - Bar Plots
+
+### Introduction
+
+In the previous chapter, we learnt to build line charts. In this chapter, we will learn to:
+
+- build 
+    - simple bar plot
+    - stacked bar plot
+    - grouped bar plot
+    - proportional bar plot
+- map aesthetics to variables
+- specify values for 
+    - bar color
+    - bar line color
+    - bar line type
+    - bar line size
+
+```{r bar, echo=FALSE, eval=TRUE, results='hide', message=FALSE}
+library(ggplot2)
+library(readr)
+```
+
+### Libraries, Code & Data
+
+We will use the following libraries in this chapter:
+
+- [readr](https://readr.tidyverse.org/)
+- [ggplot2](https://ggplot2.tidyverse.org/)
+
+All the data sets used in this chapter can be found [here](https://github.com/rsquaredacademy/datasets) and code can be downloaded from [here](https://gist.github.com/rsquaredacademy/096329693fa1f9313771d4e259cce1ec).
+
+### Data
+
+```{r import2d, eval=TRUE, message=FALSE}
+ecom <- readr::read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv')
+ecom
+```
+
+### Data Dictionary
+
+- id: row id
+- referrer: referrer website/search engine
+- os: operating system
+- browser: browser
+- device: device used to visit the website
+- n_pages: number of pages visited
+- duration: time spent on the website (in seconds)
+- repeat: frequency of visits
+- country: country of origin
+- purchase: whether visitor purchased
+- order_value: order value of visitor (in dollars)
+
+### Aesthetics
+
+- `fill`
+- `color`
+- `linetype`
+- `size`
+- `position`
+
+
+\newpage    
+
+#### Simple Bar Plot
+
+Let us start by building a simple bar plot using `geom_bar()`. We will look at the
+distribution of devices that drive traffic to a fictional website.
+
+```{r bar2, fig.align='center'}
+ggplot(ecom) +
+  geom_bar(aes(factor(device)))
+```
+
+\newpage    
+
+#### Bar Color
+
+Use the `fill` argument to modify the color of the bars.
+
+```{r bar3, fig.align='center'}
+ggplot(ecom) +
+  geom_bar(aes(factor(device)),
+           fill = c('red', 'blue', 'green'))
+```
+
+\newpage    
+
+#### Stacked Bar Plot
+
+To build a stacked bar plot, map the `fill` argument to another categorical variable. In 
+the below example, we map `fill` to `referrer`.
+
+```{r bar7, fig.align='center'}
+ggplot(ecom) +
+  geom_bar(aes(device, fill = factor(referrer)))
+```
+
+\newpage    
+
+#### Grouped Bar Plot
+
+Use the `position` argument to create a grouped bar plot. Assign the value `dodge` 
+to `position` argument. Instead of stacking the bars on top of one another, the bar 
+are placed next to each other. 
+
+```{r bar8, fig.align='center'}
+ggplot(ecom) +
+  geom_bar(aes(device, fill = factor(referrer)), position = 'dodge')
+```
+
+\newpage    
+
+#### Proportional Bar Plot
+
+Proportional bar plots can be created by assigning the value `fill` to 
+the `position` argument. In a proportional bar plot, the height of all 
+the bars is same.
+
+```{r bar10, fig.align='center'}
+ggplot(ecom) +
+  geom_bar(aes(device, fill = factor(referrer)), position = 'fill')
+```
+
+\newpage    
+
+#### Horizontal Bar Plot
+
+Use `coord_flip()` to create a horizontal bar plot.
+
+```{r bar9, fig.align='center'}
+ggplot(ecom) +
+  geom_bar(aes(factor(device), fill = factor(referrer))) +
+  coord_flip()
+```
+
+### Summary
+
+In this chapter, we learnt to:
+
+- build 
+    - simple bar plot
+    - stacked bar plot
+    - grouped bar plot
+    - proportional bar plot
+- map aesthetics to variables
+- specify values for 
+    - bar color
+    - bar line color
+    - bar line type
+    - bar line size
+
+
+### Up Next..
+
+In the next chapter, we will learn to build box plots.
+
+\newpage
+
+# Data Visulaization - Box Plots
+
+### Introduction
+
+In the previous chapter, we learnt how to build bar charts. In this chapter, we will 
+
+- build box plots
+- modify box 
+    - color
+    - fill
+    - alpha
+    - line size
+    - line type
+- modify outlier 
+    - color
+    - shape 
+    - size 
+    - alpha
+
+```{r box, echo=FALSE, eval=TRUE, results='hide', message=FALSE}
+library(ggplot2)
+library(readr)
+```
+
+### Libraries, Code & Data
+
+We will use the following libraries in this chapter:
+
+- [readr](https://readr.tidyverse.org/)
+- [ggplot2](https://ggplot2.tidyverse.org/)
+
+All the data sets used in this chapter can be found [here](https://github.com/rsquaredacademy/datasets) and code can be downloaded from [here](https://gist.github.com/rsquaredacademy/246091b512a6c006e68374e2d24caf7c).
+
+### Data
+
+```{r importe, eval=TRUE, message=FALSE}
+ecom <- readr::read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv')
+ecom
+```
+
+### Data Dictionary
+
+- id: row id
+- referrer: referrer website/search engine
+- os: operating system
+- browser: browser
+- device: device used to visit the website
+- n_pages: number of pages visited
+- duration: time spent on the website (in seconds)
+- repeat: frequency of visits
+- country: country of origin
+- purchase: whether visitor purchased
+- order_value: order value of visitor (in dollars)
+
+#### Univariate Box Plot
+
+Let us create a univariate box plot i.e. we are not comparing the distribuion
+of the variable across groups. In `geom_boxplot()`, we must map the `x` aesthetic 
+to a variable else it will return an error. In order to create the box plot, we will
+assing the value `factor(1)` to the `x` aesthetic and the variable whose distribution
+we are examining to the `y` aesthetic.
+
+\newpage    
+
+```{r box2, fig.align='center'}
+ggplot(ecom) +
+  geom_boxplot(aes(x = factor(1), y = n_visit))
+```
+
+\newpage    
+
+#### Box Plot
+
+If we are comparing the distribution of a variable across groups, we can map the
+`x` aesthetic to a categorical variable. In the below example, we are comparing the
+distribution of `n_visit` across different device types.
+
+```{r box3, fig.align='center'}
+ggplot(ecom) +
+  geom_boxplot(aes(x = factor(device), y = n_visit))
+```
+
+\newpage    
+
+#### Notch
+
+If we want to test whether the medians of the different groups differ, we can use the `notch` argument and set it to `TRUE`. A notch is drawn in each side of the boxes and if the notches of the plots do not overlap, it is strong evidence that the medians differ.
+
+```{r box5, fig.align='center'}
+ggplot(ecom) +
+  geom_boxplot(aes(x = factor(device), y = n_visit),
+               notch = TRUE) 
+```
+
+#### Outliers
+
+The box plot is useful in detecting outliers in the data. In this section, we will learn 
+to modify the appearance of the outlier using:
+
+- `outlier.color`
+- `outlier.shape`
+- `outlier.size`
+- `outlier.opacity`
+
+In the next 4 examples, we will modify the appearance of the outlier.
+
+\newpage    
+
+###### Outlier Color
+
+```{r box7, fig.align='center'}
+ggplot(ecom) +
+  geom_boxplot(aes(x = factor(device), y = duration),
+               outlier.color = 'red')
+```
+
+\newpage    
+
+###### Outlier Shape
+
+```{r box8, fig.align='center'}
+ggplot(ecom) +
+  geom_boxplot(aes(x = factor(device), y = duration),
+               outlier.shape = 23)
+```
+
+\newpage    
+
+###### Outlier Size
+
+```{r box10, fig.align='center'}
+ggplot(ecom) +
+  geom_boxplot(aes(x = factor(device), y = duration), outlier.size = 3) +
+  expand_limits(y = c(0, 1100))
+```
+
+\newpage    
+
+###### Outlier Alpha
+
+```{r box11, fig.align='center'}
+ggplot(ecom) +
+  geom_boxplot(aes(x = factor(device), y = duration),
+               outlier.color = 'blue', outlier.alpha = 0.3) +
+  expand_limits(y = c(0, 1100))
+```
+
+\newpage    
+
+### Box Aesthetics
+
+In this section, we will learn to modify the appearance of the box.
+
+#### Background Color
+
+The background color of the box can be modified using the `fill` argument. We can
+either map it to variables or specify values for each box in the plot.
+
+###### Specify Values for Fill
+
+```{r box12, fig.align='center'}
+ggplot(ecom) +
+  geom_boxplot(aes(x = factor(device), y = duration),
+               fill = c('blue', 'red', 'green')) 
+```
+
+\newpage    
+
+###### Map Fill to Variable
+
+```{r box13, fig.align='center'}
+ggplot(ecom) +
+  geom_boxplot(aes(x = factor(device), y = duration,
+               fill = factor(device))) 
+```
+
+\newpage
+
+#### Horizontal Box Plot
+
+Use `coord_flip()` to create a horizontal box plot.
+
+```{r box4, fig.align='center'}
+ggplot(ecom) +
+  geom_boxplot(aes(x = factor(device), y = n_visit)) +
+  coord_flip()
+```
+
+
+### Summary
+
+In this chapter, we learnt to:
+
+- build box plots
+- modify outlier color, shape, size etc.
+- modify box color
+
+### Up Next..
+
+In the next chapter, we will learn to build histograms.
+
+\newpage
+
+# Data Visulaization - Histograms
+
+### Introduction
+
+In the previous chapter, we learnt to build box plots. In this chapter, we will learn to
+
+- build histogram
+- specify bins
+- modify 
+    - color
+    - fill
+    - alpha
+    - bin width
+    - line type
+    - line size
+
+A histogram is a plot that can be used to examine the shape and spread of  continuous data. It looks very similar to a bar graph and can be used to detect outliers and skewness in data. The histogram graphically shows the following:
+
+- center (location) of the data
+- spread (dispersion) of the data
+- skewness
+- outliers
+- presence of multiple modes
+
+To construct a histogram, the data is split into intervals called bins. The intervals may or may not be equal sized. For each bin, the number of data points that fall into it are counted (frequency). The Y axis of the histogram represents the frequency and the X axis represents the variable. 
+
+
+```{r hist, echo=FALSE, eval=TRUE, results='hide', message=FALSE}
+library(ggplot2)
+library(readr)
+```
+
+### Libraries, Code & Data
+
+We will use the following libraries in this chapter:
+
+- [readr](https://readr.tidyverse.org/)
+- [ggplot2](https://ggplot2.tidyverse.org/)
+
+All the data sets used in this chapter can be found [here](https://github.com/rsquaredacademy/datasets) and code can be downloaded from [here](https://gist.github.com/rsquaredacademy/674bc30cc1539d735bdc4e6210982d1d).
+
+### Data 
+
+```{r importf, eval=TRUE, message=FALSE}
+ecom <- readr::read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv')
+ecom
+```
+
+### Data Dictionary
+
+- id: row id
+- referrer: referrer website/search engine
+- os: operating system
+- browser: browser
+- device: device used to visit the website
+- n_pages: number of pages visited
+- duration: time spent on the website (in seconds)
+- repeat: frequency of visits
+- country: country of origin
+- purchase: whether visitor purchased
+- order_value: order value of visitor (in dollars)
+
+\newpage    
+
+#### Histogram
+
+In ggplot2, a histogram is created using `geom_histogram()`. In the below example, 
+we build the histogram of `n_visit` from the `ecom` data. 
+
+```{r hist2, fig.align='center'}
+ggplot(ecom) +
+  geom_histogram(aes(n_visit))
+```
+
+\newpage    
+
+#### Specify Bins
+
+The default number of bins used by `geom_histogram()` is 30 and may not be always useful.
+Let us specify the number of bins using the `bins` argument.
+
+```{r hist4, fig.align='center'}
+ggplot(ecom) +
+  geom_histogram(aes(n_visit), bins = 7)
+```
+
+\newpage    
+
+#### Fill
+
+Use the `fill` argument to modify the background color of the histogram. In the below
+example, we set the background color to blue.
+
+```{r hist3, fig.align='center'}
+ggplot(ecom) +
+  geom_histogram(aes(n_visit), bins = 7, fill = 'blue')
+```
+
+
+### Summary
+
+In this chapter, we learnt to:
+
+- build histogram
+- specify bins
+- modify 
+    - color
+    - fill
+
+
+
+
+
+  

@@ -1,0 +1,313 @@
+---
+title: Data Wrangling with R - Part 2
+output: beamer_presentation
+---
+
+
+
+## Agenda
+
+<hr>
+
+In this module, we will explore a set of helper functions in order to:
+
+- extract unique rows 
+- rename columns
+- sample data
+- extract columns
+- slice rows
+- arrange rows
+- compare tables
+- extract/mutate data using predicate functions
+- count observations for different levels of a variable
+
+## Case Study
+
+<hr>
+
+Let us look at a case study (e-commerce data) and see how we can use dplyr helper functions to answer questions we have about and to modify/transform the underlying data set. You can download the data from [here](https://github.com/rsquaredacademy/datasets/blob/master/web.csv) or import it directly using `read_csv()` from the [readr](readr.tidyverse.org) package.
+
+## Libraries
+
+<hr>
+
+```{r libs, echo=TRUE, eval=TRUE, results='hide', message=FALSE}
+library(dplyr)
+library(readr)
+```
+
+
+## Data
+
+<hr>
+
+```{r show, echo=TRUE, eval=TRUE, message=FALSE}
+ecom <- read_csv('data/web.csv')
+ecom
+```
+
+## Data Dictionary
+
+<hr>
+
+- id: row id
+- referrer: referrer website/search engine
+- os: operating system
+- browser: browser
+- device: device used to visit the website
+- n_pages: number of pages visited
+- duration: time spent on the website (in seconds)
+- repeat: frequency of visits
+- country: country of origin
+- purchase: whether visitor purchased
+- order_value: order value of visitor (in dollars)
+
+## Data Sanitization
+
+<hr>
+
+- `distinct()`
+- `rename()`
+
+
+----
+
+![](images/distinct_canva.png)
+
+## Traffic Sources
+
+<hr>
+
+```{r dplyr2}
+distinct(ecom, referrer)
+```
+
+## Device Types
+
+<hr>
+
+```{r dplyr30}
+distinct(ecom, device)
+```
+
+----
+
+![](images/rename_canva.png)
+
+## Rename Columns
+
+<hr>
+
+```{r dplyr3}
+rename(ecom, time_on_site = duration)
+```
+
+----
+
+![](images/sampling_canva.png)
+
+## Sampling Data
+
+<hr>
+
+```{r dplyr4}
+sample_n(ecom, size = 700)
+```
+
+## Sampling Data
+
+<hr>
+
+```{r dplyr6}
+sample_frac(ecom, size = 0.7)
+```
+
+----
+
+![](images/pull_canva.png)
+
+## Extract Device Column
+
+<hr>
+
+```{r dplyr8}
+pull(ecom, device)
+```
+
+## Extract First Column
+
+<hr>
+
+```{r dplyr9}
+pull(ecom, 1)
+```
+
+## Extract Last Column
+
+<hr>
+
+```{r dplyr10}
+pull(ecom, -1)
+```
+
+----
+
+![](images/slice_canva.png)
+
+## Extract First 20 Rows
+
+<hr>
+
+```{r dplyr11}
+slice(ecom, 1:20)
+```
+
+## Extract Last Row
+
+<hr>
+
+```{r dplyr12}
+slice(ecom, n())
+```
+
+----
+
+![](images/tally_canva.png)
+
+## Tabulate Referrers
+
+<hr>
+
+```{r dplyr14}
+ecom %>%
+  group_by(referrer) %>%
+  tally()
+```
+
+## Tabulate referrers and bouncers
+
+<hr>
+
+```{r dplyr15}
+ecom %>%
+  group_by(referrer, bouncers) %>%
+  tally()
+```
+
+## Tabulate referrers and purchasers
+
+<hr>
+
+```{r dplyr16}
+ecom %>%
+  group_by(referrer, purchase) %>%
+  tally()
+```
+
+## Tabulate Referrers & Converts
+
+<hr>
+
+```{r dplyr25}
+ecom %>%
+  group_by(referrer, purchase) %>%
+  tally() %>%
+  filter(purchase == 'true')
+```
+
+## Count
+
+<hr>
+
+```{r dplyr17}
+count(ecom, referrer, purchase)
+```
+
+----
+
+![](images/arrange_canva.png)
+
+## Top 2 referrers by orders
+
+<hr>
+
+```{r dplyr18}
+ecom %>%
+  count(referrer, purchase) %>%
+  filter(purchase == 'true') %>%
+  arrange(desc(n)) %>%
+  top_n(n = 2)
+```
+
+## Between
+
+<hr>
+
+```{r dplyr19}
+ecom %>%
+  pull(n_pages) %>%
+  between(5, 15) 
+```
+
+## Case When
+
+<hr>
+
+```{r dplyr20}
+mtcars %>%
+  select(mpg, disp, cyl, gear, carb) %>%
+  mutate(
+    type = case_when(
+      disp > 200 ~ 'High',
+      cyl == 8 ~ 'Eight',
+      TRUE ~ 'True'
+    )
+  )
+```
+
+## Select First Observation
+
+<hr>
+
+```{r dplyr21}
+ecom %>%
+  pull(referrer) %>%
+  nth(1)
+```  
+
+## Select First Observation
+
+<hr>
+
+```{r dplyr21a}
+ecom %>%
+  pull(referrer) %>%
+  first()
+```
+
+## Select 1000th Observation
+
+<hr>
+
+```{r dplyr22}
+ecom %>%
+  pull(referrer) %>%
+  nth(1000)
+```
+
+## Select Last Observation
+
+<hr>
+
+```{r dplyr23}
+ecom %>%
+  pull(referrer) %>%
+  last()
+```
+
+----
+
+![](images/thankyou.png)
+
+<!-- To do: -->
+<!--   - explain case study data -->

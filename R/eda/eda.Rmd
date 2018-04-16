@@ -1,0 +1,159 @@
+---
+output: _output.yaml
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Agenda
+
+<hr>
+
+- generate descriptive statistics for
+    - continuous data
+    - categorical data
+- use visualization to explore data
+
+## Libraries
+
+<hr>
+
+```{r eda1, eval=TRUE, echo=TRUE, message=FALSE, results='hide'}
+library(skimr)
+library(descriptr)
+```
+
+## Data Screening
+
+<hr>
+
+```{r eda0}
+ds_screener(mtcarz)
+```
+
+## Summary Statistics
+
+<hr>
+
+```{r eda2}
+summary(mtcarz)
+```
+
+## Summary Statistics
+
+<hr>
+
+```{r eda3}
+skim(mtcarz)
+```
+
+## Continuous Data
+
+<hr>
+
+```{r eda4}
+ds_summary_stats(mtcarz, mpg)
+```
+
+## Continuous Data
+
+<hr>
+
+```{r eda4a}
+ds_multi_stats(mtcarz, mpg, disp, hp)
+```
+
+## Continuous Data
+
+<hr>
+
+```{r eda5}
+ds_freq_cont(mtcarz, mpg)
+```
+
+## Continuous Data
+
+<hr>
+
+```{r eda6, fig.width=4, fig.height=3, fig.align='center', echo=FALSE}
+k <- ds_freq_cont(mtcarz, mpg)
+plot(k)
+```
+
+## Continuous Data
+
+<hr>
+
+```{r eda6a, fig.align='center', fig.width=4, fig.height=3}
+plot(ds_freq_cont(mtcarz, mpg))
+```
+
+## Categorical Data
+
+<hr>
+
+```{r eda7}
+ds_freq_table(mtcarz, cyl)
+```
+
+## Categorical Data
+
+<hr>
+
+```{r eda8, fig.align='center'}
+k <- ds_freq_table(mtcarz, cyl)
+plot(k)
+```
+
+## Categorical Data
+
+<hr>
+
+```{r eda9}
+ds_cross_table(mtcarz, cyl, gear)
+```
+
+## Categorical Data
+
+<hr>
+
+```{r eda10, fig.align='center'}
+k <- ds_cross_table(mtcarz, cyl, gear)
+plot(k)
+```
+
+## Categorical Data
+
+<hr>
+
+```{r eda11, fig.align='center'}
+k <- ds_cross_table(mtcarz, cyl, gear)
+plot(k, stacked = TRUE)
+```
+
+## Categorical Data
+
+<hr>
+
+```{r eda12, fig.align='center'}
+k <- ds_cross_table(mtcarz, cyl, gear)
+plot(k, proportional = TRUE)
+```
+
+## Grouped Summaries
+
+<hr>
+
+```{r eda13}
+ds_group_summary(mtcarz, cyl, mpg)
+```
+
+## Grouped Summaries
+
+<hr>
+
+```{r eda14, fig.align='center'}
+k <- ds_group_summary(mtcarz, cyl, mpg)
+plot(k)
+```
