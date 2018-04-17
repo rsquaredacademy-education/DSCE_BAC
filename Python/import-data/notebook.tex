@@ -1,0 +1,652 @@
+
+% Default to the notebook output style
+
+    
+
+
+% Inherit from the specified cell style.
+
+
+
+
+    
+\documentclass[11pt]{article}
+
+    
+    
+    \usepackage[T1]{fontenc}
+    % Nicer default font (+ math font) than Computer Modern for most use cases
+    \usepackage{mathpazo}
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % We will generate all images so they have a width \maxwidth. This means
+    % that they will get their normal width if they fit onto the page, but
+    % are scaled down if they would overflow the margins.
+    \makeatletter
+    \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth
+    \else\Gin@nat@width\fi}
+    \makeatother
+    \let\Oldincludegraphics\includegraphics
+    % Set max figure width to be 80% of text width, for now hardcoded.
+    \renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=.8\maxwidth]{#1}}
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionLabelFormat{nolabel}{}
+    \captionsetup{labelformat=nolabel}
+
+    \usepackage{adjustbox} % Used to constrain images to a maximum size 
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage[utf8x]{inputenc} % Allow utf-8 characters in the tex document
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range 
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    
+
+    
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatability definitions
+    \def\gt{>}
+    \def\lt{<}
+    % Document parameters
+    \title{Import Data}
+    
+    
+    
+
+    % Pygments definitions
+    
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % Exact colors from NB
+    \definecolor{incolor}{rgb}{0.0, 0.0, 0.5}
+    \definecolor{outcolor}{rgb}{0.545, 0.0, 0.0}
+
+
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+    \begin{document}
+    
+    
+    \maketitle
+    
+    
+
+    
+    \subsection{Import Data into Python}\label{import-data-into-python}
+
+    \paragraph{Agenda}\label{agenda}
+
+In this module, we will learn to:
+
+\begin{itemize}
+\tightlist
+\item
+  read data from delimited/flat files
+\item
+  read data from excel files
+\item
+  read data from statistical softwares
+\end{itemize}
+
+    \paragraph{Libraries}\label{libraries}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}1}]:} \PY{k+kn}{import} \PY{n+nn}{pandas} \PY{k}{as} \PY{n+nn}{pd}
+\end{Verbatim}
+
+
+    \paragraph{Comma Separated Values}\label{comma-separated-values}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}2}]:} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{data/mtcars.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}2}]:}      mpg  cyl   disp   hp  drat     wt   qsec  vs  am  gear  carb
+        0   21.0    6  160.0  110  3.90  2.620  16.46   0   1     4     4
+        1   21.0    6  160.0  110  3.90  2.875  17.02   0   1     4     4
+        2   22.8    4  108.0   93  3.85  2.320  18.61   1   1     4     1
+        3   21.4    6  258.0  110  3.08  3.215  19.44   1   0     3     1
+        4   18.7    8  360.0  175  3.15  3.440  17.02   0   0     3     2
+        5   18.1    6  225.0  105  2.76  3.460  20.22   1   0     3     1
+        6   14.3    8  360.0  245  3.21  3.570  15.84   0   0     3     4
+        7   24.4    4  146.7   62  3.69  3.190  20.00   1   0     4     2
+        8   22.8    4  140.8   95  3.92  3.150  22.90   1   0     4     2
+        9   19.2    6  167.6  123  3.92  3.440  18.30   1   0     4     4
+        10  17.8    6  167.6  123  3.92  3.440  18.90   1   0     4     4
+        11  16.4    8  275.8  180  3.07  4.070  17.40   0   0     3     3
+        12  17.3    8  275.8  180  3.07  3.730  17.60   0   0     3     3
+        13  15.2    8  275.8  180  3.07  3.780  18.00   0   0     3     3
+        14  10.4    8  472.0  205  2.93  5.250  17.98   0   0     3     4
+        15  10.4    8  460.0  215  3.00  5.424  17.82   0   0     3     4
+        16  14.7    8  440.0  230  3.23  5.345  17.42   0   0     3     4
+        17  32.4    4   78.7   66  4.08  2.200  19.47   1   1     4     1
+        18  30.4    4   75.7   52  4.93  1.615  18.52   1   1     4     2
+        19  33.9    4   71.1   65  4.22  1.835  19.90   1   1     4     1
+        20  21.5    4  120.1   97  3.70  2.465  20.01   1   0     3     1
+        21  15.5    8  318.0  150  2.76  3.520  16.87   0   0     3     2
+        22  15.2    8  304.0  150  3.15  3.435  17.30   0   0     3     2
+        23  13.3    8  350.0  245  3.73  3.840  15.41   0   0     3     4
+        24  19.2    8  400.0  175  3.08  3.845  17.05   0   0     3     2
+        25  27.3    4   79.0   66  4.08  1.935  18.90   1   1     4     1
+        26  26.0    4  120.3   91  4.43  2.140  16.70   0   1     5     2
+        27  30.4    4   95.1  113  3.77  1.513  16.90   1   1     5     2
+        28  15.8    8  351.0  264  4.22  3.170  14.50   0   1     5     4
+        29  19.7    6  145.0  175  3.62  2.770  15.50   0   1     5     6
+        30  15.0    8  301.0  335  3.54  3.570  14.60   0   1     5     8
+        31  21.4    4  121.0  109  4.11  2.780  18.60   1   1     4     2
+\end{Verbatim}
+            
+    \subparagraph{Specify Delimiter}\label{specify-delimiter}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}3}]:} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}table}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{data/mtcars.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{sep} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{,}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}3}]:}      mpg  cyl   disp   hp  drat     wt   qsec  vs  am  gear  carb
+        0   21.0    6  160.0  110  3.90  2.620  16.46   0   1     4     4
+        1   21.0    6  160.0  110  3.90  2.875  17.02   0   1     4     4
+        2   22.8    4  108.0   93  3.85  2.320  18.61   1   1     4     1
+        3   21.4    6  258.0  110  3.08  3.215  19.44   1   0     3     1
+        4   18.7    8  360.0  175  3.15  3.440  17.02   0   0     3     2
+        5   18.1    6  225.0  105  2.76  3.460  20.22   1   0     3     1
+        6   14.3    8  360.0  245  3.21  3.570  15.84   0   0     3     4
+        7   24.4    4  146.7   62  3.69  3.190  20.00   1   0     4     2
+        8   22.8    4  140.8   95  3.92  3.150  22.90   1   0     4     2
+        9   19.2    6  167.6  123  3.92  3.440  18.30   1   0     4     4
+        10  17.8    6  167.6  123  3.92  3.440  18.90   1   0     4     4
+        11  16.4    8  275.8  180  3.07  4.070  17.40   0   0     3     3
+        12  17.3    8  275.8  180  3.07  3.730  17.60   0   0     3     3
+        13  15.2    8  275.8  180  3.07  3.780  18.00   0   0     3     3
+        14  10.4    8  472.0  205  2.93  5.250  17.98   0   0     3     4
+        15  10.4    8  460.0  215  3.00  5.424  17.82   0   0     3     4
+        16  14.7    8  440.0  230  3.23  5.345  17.42   0   0     3     4
+        17  32.4    4   78.7   66  4.08  2.200  19.47   1   1     4     1
+        18  30.4    4   75.7   52  4.93  1.615  18.52   1   1     4     2
+        19  33.9    4   71.1   65  4.22  1.835  19.90   1   1     4     1
+        20  21.5    4  120.1   97  3.70  2.465  20.01   1   0     3     1
+        21  15.5    8  318.0  150  2.76  3.520  16.87   0   0     3     2
+        22  15.2    8  304.0  150  3.15  3.435  17.30   0   0     3     2
+        23  13.3    8  350.0  245  3.73  3.840  15.41   0   0     3     4
+        24  19.2    8  400.0  175  3.08  3.845  17.05   0   0     3     2
+        25  27.3    4   79.0   66  4.08  1.935  18.90   1   1     4     1
+        26  26.0    4  120.3   91  4.43  2.140  16.70   0   1     5     2
+        27  30.4    4   95.1  113  3.77  1.513  16.90   1   1     5     2
+        28  15.8    8  351.0  264  4.22  3.170  14.50   0   1     5     4
+        29  19.7    6  145.0  175  3.62  2.770  15.50   0   1     5     6
+        30  15.0    8  301.0  335  3.54  3.570  14.60   0   1     5     8
+        31  21.4    4  121.0  109  4.11  2.780  18.60   1   1     4     2
+\end{Verbatim}
+            
+    \subparagraph{Column Names}\label{column-names}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}4}]:} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{data/mtcars1.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{header} \PY{o}{=} \PY{k+kc}{None}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}4}]:}       0   1      2    3     4      5      6   7   8   9   10
+        0   21.0   6  160.0  110  3.90  2.620  16.46   0   1   4   4
+        1   21.0   6  160.0  110  3.90  2.875  17.02   0   1   4   4
+        2   22.8   4  108.0   93  3.85  2.320  18.61   1   1   4   1
+        3   21.4   6  258.0  110  3.08  3.215  19.44   1   0   3   1
+        4   18.7   8  360.0  175  3.15  3.440  17.02   0   0   3   2
+        5   18.1   6  225.0  105  2.76  3.460  20.22   1   0   3   1
+        6   14.3   8  360.0  245  3.21  3.570  15.84   0   0   3   4
+        7   24.4   4  146.7   62  3.69  3.190  20.00   1   0   4   2
+        8   22.8   4  140.8   95  3.92  3.150  22.90   1   0   4   2
+        9   19.2   6  167.6  123  3.92  3.440  18.30   1   0   4   4
+        10  17.8   6  167.6  123  3.92  3.440  18.90   1   0   4   4
+        11  16.4   8  275.8  180  3.07  4.070  17.40   0   0   3   3
+        12  17.3   8  275.8  180  3.07  3.730  17.60   0   0   3   3
+        13  15.2   8  275.8  180  3.07  3.780  18.00   0   0   3   3
+        14  10.4   8  472.0  205  2.93  5.250  17.98   0   0   3   4
+        15  10.4   8  460.0  215  3.00  5.424  17.82   0   0   3   4
+        16  14.7   8  440.0  230  3.23  5.345  17.42   0   0   3   4
+        17  32.4   4   78.7   66  4.08  2.200  19.47   1   1   4   1
+        18  30.4   4   75.7   52  4.93  1.615  18.52   1   1   4   2
+        19  33.9   4   71.1   65  4.22  1.835  19.90   1   1   4   1
+        20  21.5   4  120.1   97  3.70  2.465  20.01   1   0   3   1
+        21  15.5   8  318.0  150  2.76  3.520  16.87   0   0   3   2
+        22  15.2   8  304.0  150  3.15  3.435  17.30   0   0   3   2
+        23  13.3   8  350.0  245  3.73  3.840  15.41   0   0   3   4
+        24  19.2   8  400.0  175  3.08  3.845  17.05   0   0   3   2
+        25  27.3   4   79.0   66  4.08  1.935  18.90   1   1   4   1
+        26  26.0   4  120.3   91  4.43  2.140  16.70   0   1   5   2
+        27  30.4   4   95.1  113  3.77  1.513  16.90   1   1   5   2
+        28  15.8   8  351.0  264  4.22  3.170  14.50   0   1   5   4
+        29  19.7   6  145.0  175  3.62  2.770  15.50   0   1   5   6
+        30  15.0   8  301.0  335  3.54  3.570  14.60   0   1   5   8
+        31  21.4   4  121.0  109  4.11  2.780  18.60   1   1   4   2
+\end{Verbatim}
+            
+    \subparagraph{Skip Rows}\label{skip-rows}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}6}]:} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{data/mtcars2.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{skiprows} \PY{o}{=} \PY{l+m+mi}{19}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}6}]:}      mpg  cyl   disp   hp  drat     wt   qsec  vs  am  gear  carb
+        0   21.0    6  160.0  110  3.90  2.620  16.46   0   1     4     4
+        1   21.0    6  160.0  110  3.90  2.875  17.02   0   1     4     4
+        2   22.8    4  108.0   93  3.85  2.320  18.61   1   1     4     1
+        3   21.4    6  258.0  110  3.08  3.215  19.44   1   0     3     1
+        4   18.7    8  360.0  175  3.15  3.440  17.02   0   0     3     2
+        5   18.1    6  225.0  105  2.76  3.460  20.22   1   0     3     1
+        6   14.3    8  360.0  245  3.21  3.570  15.84   0   0     3     4
+        7   24.4    4  146.7   62  3.69  3.190  20.00   1   0     4     2
+        8   22.8    4  140.8   95  3.92  3.150  22.90   1   0     4     2
+        9   19.2    6  167.6  123  3.92  3.440  18.30   1   0     4     4
+        10  17.8    6  167.6  123  3.92  3.440  18.90   1   0     4     4
+        11  16.4    8  275.8  180  3.07  4.070  17.40   0   0     3     3
+        12  17.3    8  275.8  180  3.07  3.730  17.60   0   0     3     3
+        13  15.2    8  275.8  180  3.07  3.780  18.00   0   0     3     3
+        14  10.4    8  472.0  205  2.93  5.250  17.98   0   0     3     4
+        15  10.4    8  460.0  215  3.00  5.424  17.82   0   0     3     4
+        16  14.7    8  440.0  230  3.23  5.345  17.42   0   0     3     4
+        17  32.4    4   78.7   66  4.08  2.200  19.47   1   1     4     1
+        18  30.4    4   75.7   52  4.93  1.615  18.52   1   1     4     2
+        19  33.9    4   71.1   65  4.22  1.835  19.90   1   1     4     1
+        20  21.5    4  120.1   97  3.70  2.465  20.01   1   0     3     1
+        21  15.5    8  318.0  150  2.76  3.520  16.87   0   0     3     2
+        22  15.2    8  304.0  150  3.15  3.435  17.30   0   0     3     2
+        23  13.3    8  350.0  245  3.73  3.840  15.41   0   0     3     4
+        24  19.2    8  400.0  175  3.08  3.845  17.05   0   0     3     2
+        25  27.3    4   79.0   66  4.08  1.935  18.90   1   1     4     1
+        26  26.0    4  120.3   91  4.43  2.140  16.70   0   1     5     2
+        27  30.4    4   95.1  113  3.77  1.513  16.90   1   1     5     2
+        28  15.8    8  351.0  264  4.22  3.170  14.50   0   1     5     4
+        29  19.7    6  145.0  175  3.62  2.770  15.50   0   1     5     6
+        30  15.0    8  301.0  335  3.54  3.570  14.60   0   1     5     8
+        31  21.4    4  121.0  109  4.11  2.780  18.60   1   1     4     2
+\end{Verbatim}
+            
+    \subparagraph{Maximum Rows}\label{maximum-rows}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}7}]:} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{data/mtcars.csv}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{nrows} \PY{o}{=} \PY{l+m+mi}{20}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}7}]:}      mpg  cyl   disp   hp  drat     wt   qsec  vs  am  gear  carb
+        0   21.0    6  160.0  110  3.90  2.620  16.46   0   1     4     4
+        1   21.0    6  160.0  110  3.90  2.875  17.02   0   1     4     4
+        2   22.8    4  108.0   93  3.85  2.320  18.61   1   1     4     1
+        3   21.4    6  258.0  110  3.08  3.215  19.44   1   0     3     1
+        4   18.7    8  360.0  175  3.15  3.440  17.02   0   0     3     2
+        5   18.1    6  225.0  105  2.76  3.460  20.22   1   0     3     1
+        6   14.3    8  360.0  245  3.21  3.570  15.84   0   0     3     4
+        7   24.4    4  146.7   62  3.69  3.190  20.00   1   0     4     2
+        8   22.8    4  140.8   95  3.92  3.150  22.90   1   0     4     2
+        9   19.2    6  167.6  123  3.92  3.440  18.30   1   0     4     4
+        10  17.8    6  167.6  123  3.92  3.440  18.90   1   0     4     4
+        11  16.4    8  275.8  180  3.07  4.070  17.40   0   0     3     3
+        12  17.3    8  275.8  180  3.07  3.730  17.60   0   0     3     3
+        13  15.2    8  275.8  180  3.07  3.780  18.00   0   0     3     3
+        14  10.4    8  472.0  205  2.93  5.250  17.98   0   0     3     4
+        15  10.4    8  460.0  215  3.00  5.424  17.82   0   0     3     4
+        16  14.7    8  440.0  230  3.23  5.345  17.42   0   0     3     4
+        17  32.4    4   78.7   66  4.08  2.200  19.47   1   1     4     1
+        18  30.4    4   75.7   52  4.93  1.615  18.52   1   1     4     2
+        19  33.9    4   71.1   65  4.22  1.835  19.90   1   1     4     1
+\end{Verbatim}
+            
+    \paragraph{Excel Files}\label{excel-files}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}14}]:} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}excel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{data/sample.xls}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{sheet\PYZus{}name} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}14}]:}           channel  users  new\_users  sessions bounce\_rate
+         0  Organic Search  43296      40238     50810      48.72\%
+         1          Direct  12916      12311     16419      49.27\%
+         2        Referral  10983       7636     18105      22.26\%
+         3          Social  10346      10029     11101      61.92\%
+         4         Display   5564       4790      7220      83.30\%
+         5     Paid Search   2687       2205      3438      38.02\%
+         6      Affiliates   1773       1585      2167      55.75\%
+\end{Verbatim}
+            
+    \subparagraph{Read Specific Columns}\label{read-specific-columns}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}17}]:} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}excel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{data/sample.xls}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{sheet\PYZus{}name} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{,} \PY{n}{usecols} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{A:C}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}17}]:}           channel  users  new\_users
+         0  Organic Search  43296      40238
+         1          Direct  12916      12311
+         2        Referral  10983       7636
+         3          Social  10346      10029
+         4         Display   5564       4790
+         5     Paid Search   2687       2205
+         6      Affiliates   1773       1585
+\end{Verbatim}
+            
+    \paragraph{Statistical Softwares}\label{statistical-softwares}
+
+    \subparagraph{SAS}\label{sas}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}18}]:} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}sas}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{data/airline.sas7bdat}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}18}]:}            YEAR          Y      W       R      L      K
+         0   1948.000714   1.214000  0.243  0.1454  1.415  0.612
+         1   1949.000713   1.354000  0.260  0.2181  1.384  0.559
+         2   1950.000123   1.569000  0.278  0.3157  1.388  0.573
+         3   1951.000036   1.948000  0.297  0.3940  1.550  0.564
+         4   1952.000009   2.265000  0.310  0.3559  1.802  0.574
+         5   1953.000215   2.731000  0.322  0.3593  1.926  0.711
+         6   1954.000001   3.025000  0.335  0.4025  1.964  0.776
+         7   1955.000055   3.562000  0.350  0.3961  2.116  0.827
+         8   1956.000059   3.979000  0.361  0.3822  2.435  0.800
+         9   1957.000028   4.420000  0.379  0.3045  2.707  0.921
+         10  1958.000688   4.563000  0.391  0.3284  2.706  1.067
+         11  1959.000410   5.385000  0.426  0.3856  2.846  1.083
+         12  1960.000006   5.554000  0.441  0.3193  3.089  1.481
+         13  1961.000006   5.465000  0.460  0.3079  3.122  1.736
+         14  1962.000139   5.825000  0.485  0.3783  3.184  1.926
+         15  1963.000000   6.876000  0.506  0.4180  3.263  2.041
+         16  1964.000028   7.823000  0.538  0.5163  3.412  1.997
+         17  1965.000009   9.120000  0.564  0.5879  3.623  2.257
+         18  1966.000150  10.512000  0.586  0.5369  4.074  2.742
+         19  1967.000017  13.020000  0.622  0.4443  4.710  3.564
+         20  1968.000421  15.261000  0.666  0.3052  5.217  4.767
+         21  1969.000002  16.313000  0.731  0.2332  5.569  6.511
+         22  1970.000000  16.002001  0.831  0.1883  5.495  7.627
+         23  1971.000166  15.876000  0.906  0.2023  5.334  8.673
+         24  1972.000101  16.662001  1.000  0.2506  5.345  8.331
+         25  1973.000033  17.014000  1.056  0.2668  5.662  8.557
+         26  1974.000000  19.305000  1.131  0.2664  5.729  9.508
+         27  1975.000009  18.721001  1.247  0.2301  5.722  9.062
+         28  1976.000177  19.250000  1.375  0.3452  5.762  8.262
+         29  1977.000002  20.646999  1.544  0.4508  5.877  7.474
+         30  1978.000002  22.726000  1.703  0.5877  6.108  7.104
+         31  1979.000017  23.618999  1.779  0.5346  6.852  6.874
+\end{Verbatim}
+            
+    \subparagraph{STATA}\label{stata}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}19}]:} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}stata}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{data/airline.dta}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}19}]:}     year          y      w       r      l      k
+         0   1948   1.214000  0.243  0.1454  1.415  0.612
+         1   1949   1.354000  0.260  0.2181  1.384  0.559
+         2   1950   1.569000  0.278  0.3157  1.388  0.573
+         3   1951   1.948000  0.297  0.3940  1.550  0.564
+         4   1952   2.265000  0.310  0.3559  1.802  0.574
+         5   1953   2.731000  0.322  0.3593  1.926  0.711
+         6   1954   3.025000  0.335  0.4025  1.964  0.776
+         7   1955   3.562000  0.350  0.3961  2.116  0.827
+         8   1956   3.979000  0.361  0.3822  2.435  0.800
+         9   1957   4.420000  0.379  0.3045  2.707  0.921
+         10  1958   4.563000  0.391  0.3284  2.706  1.067
+         11  1959   5.385000  0.426  0.3856  2.846  1.083
+         12  1960   5.554000  0.441  0.3193  3.089  1.481
+         13  1961   5.465000  0.460  0.3079  3.122  1.736
+         14  1962   5.825000  0.485  0.3783  3.184  1.926
+         15  1963   6.876000  0.506  0.4180  3.263  2.041
+         16  1964   7.823000  0.538  0.5163  3.412  1.997
+         17  1965   9.120000  0.564  0.5879  3.623  2.257
+         18  1966  10.512000  0.586  0.5369  4.074  2.742
+         19  1967  13.020000  0.622  0.4443  4.710  3.564
+         20  1968  15.261000  0.666  0.3052  5.217  4.767
+         21  1969  16.313000  0.731  0.2332  5.569  6.511
+         22  1970  16.002001  0.831  0.1883  5.495  7.627
+         23  1971  15.876000  0.906  0.2023  5.334  8.673
+         24  1972  16.662001  1.000  0.2506  5.345  8.331
+         25  1973  17.014000  1.056  0.2668  5.662  8.557
+         26  1974  19.305000  1.131  0.2664  5.729  9.508
+         27  1975  18.721001  1.247  0.2301  5.722  9.062
+         28  1976  19.250000  1.375  0.3452  5.762  8.262
+         29  1977  20.646999  1.544  0.4508  5.877  7.474
+         30  1978  22.726000  1.703  0.5877  6.108  7.104
+         31  1979  23.618999  1.779  0.5346  6.852  6.874
+\end{Verbatim}
+            
+    \paragraph{Summary}\label{summary}
+
+\begin{itemize}
+\tightlist
+\item
+  use read\_csv for flat/delimited files
+\item
+  use read\_excel for excel files
+\item
+  use read\_sas for SAS files
+\item
+  use read\_stat for STATA files
+\end{itemize}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+    \end{document}
