@@ -1,0 +1,12 @@
+revealjs::revealjs_presentation:
+    transition: slide
+    incremental: true
+    theme: default
+    highlight: haddock
+    center: false
+    reveal_options:
+      slideNumber: true
+      previewLinks: true
+    fig_height: 5
+    fig_width: 6
+    css: styles.css
