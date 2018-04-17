@@ -23,6 +23,8 @@ R can be installed from the R project [website](https://cran.r-project.org/). Pl
 -   [R Download Demo](https://vimeo.com/265157309)
 -   [R Installation Demo](https://vimeo.com/265157340)
 
+Download and install Rtools from [here](http://cran.us.r-project.org/bin/windows/Rtools/).
+
 ### RStudio
 
 RStudio IDE can be installed from the RStudio [website](https://www.rstudio.com/products/rstudio/download/). Install the free desktop version.
