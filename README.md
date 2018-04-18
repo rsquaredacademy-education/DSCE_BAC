@@ -9,7 +9,7 @@ If you run into issues while installing the softwares required for the workshop,
 Introduction
 ------------
 
-Materials for the workshop. Please install all the required softwares and download the data sets and scripts from this repository before the workshop. **The final version of the materials will be available by 5 PM Wednesday (18/04/2018). Please ensure that you download them before coming to the workshop.**
+Materials for the workshop. Please install all the required softwares and download the data sets and scripts from this repository before the workshop. **The final version of the materials will be available by 6 PM Wednesday (18/04/2018). Please ensure that you download them before coming to the workshop.**
 
 -   [Workshop Material Download Demo](https://vimeo.com/265157284)
 
