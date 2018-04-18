@@ -34,7 +34,9 @@ RStudio IDE can be installed from the RStudio [website](https://www.rstudio.com/
 
 ### R Packages
 
-Below are a list of R packages required for the workshop.
+Below are a list of R packages required for the workshop:
+
+#### First Day
 
 -   readr
 -   readxl
@@ -44,6 +46,9 @@ Below are a list of R packages required for the workshop.
 -   magrittr
 -   descriptr
 -   skimr
+
+#### Second Day
+
 -   inferr
 -   olsrr
 -   blorr
@@ -51,11 +56,17 @@ Below are a list of R packages required for the workshop.
 -   knitr
 -   devtools
 -   forcats
--   magrittr
+-   caret
 
-Once you download the workshop materials, run the script to download the above packages as shown in the below video:
+Once you download the workshop materials, run the script (`package_download.R`) in the `R` folder to download the above packages as shown in the below video:
 
 -   [R Packages Installation Demo](https://vimeo.com/265157256)
+
+To test if a package has been correctly installed or not, type `library(packagename)` in the RStudio console. For example, to test if **readr** package has been installed, type `library(readr)` in the R console. If the package has not been installed correctly, you will get the following error message:
+
+`Error in library(readr) : there is no package called ‘readr’`
+
+There will be no error message if the package has been correctly installed.
 
 ### Anaconda
 
