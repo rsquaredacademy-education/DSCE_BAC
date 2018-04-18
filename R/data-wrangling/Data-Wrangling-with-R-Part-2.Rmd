@@ -1,9 +1,8 @@
 ---
-title: Data Wrangling with R - Part 2
-output: beamer_presentation
+output: _output.yaml
 ---
 
-
+## {data-background="images/dplyr.png"}
 
 ## Agenda
 
@@ -31,17 +30,28 @@ Let us look at a case study (e-commerce data) and see how we can use dplyr helpe
 
 <hr>
 
-```{r libs, echo=TRUE, eval=TRUE, results='hide', message=FALSE}
+
+```{r libs2a, eval=FALSE}
 library(dplyr)
 library(readr)
 ```
 
+```{r libs2b, echo=FALSE, eval=TRUE, results='hide', message=FALSE}
+library(dplyr)
+library(readr)
+```
 
 ## Data
 
 <hr>
 
-```{r show, echo=TRUE, eval=TRUE, message=FALSE}
+```{r import, eval=FALSE}
+ecom <- read_csv('data/web.csv')
+```
+
+
+
+```{r show, echo=FALSE, eval=TRUE, message=FALSE}
 ecom <- read_csv('data/web.csv')
 ecom
 ```
@@ -62,17 +72,12 @@ ecom
 - purchase: whether visitor purchased
 - order_value: order value of visitor (in dollars)
 
-## Data Sanitization
+```{r dplyr1, echo=FALSE, eval=TRUE, results='hide', message=FALSE}
+library(dplyr)
+options(tibble.width = Inf)
+```
 
-<hr>
-
-- `distinct()`
-- `rename()`
-
-
-----
-
-![](images/distinct_canva.png)
+## {data-background="images/distinct_canva.png"}
 
 ## Traffic Sources
 
@@ -90,9 +95,7 @@ distinct(ecom, referrer)
 distinct(ecom, device)
 ```
 
-----
-
-![](images/rename_canva.png)
+## {data-background="images/rename_canva.png"}
 
 ## Rename Columns
 
@@ -102,9 +105,7 @@ distinct(ecom, device)
 rename(ecom, time_on_site = duration)
 ```
 
-----
-
-![](images/sampling_canva.png)
+## {data-background="images/sampling_canva.png"}
 
 ## Sampling Data
 
@@ -122,9 +123,7 @@ sample_n(ecom, size = 700)
 sample_frac(ecom, size = 0.7)
 ```
 
-----
-
-![](images/pull_canva.png)
+## {data-background="images/pull_canva.png"}
 
 ## Extract Device Column
 
@@ -150,9 +149,7 @@ pull(ecom, 1)
 pull(ecom, -1)
 ```
 
-----
-
-![](images/slice_canva.png)
+## {data-background="images/slice_canva.png"}
 
 ## Extract First 20 Rows
 
@@ -170,9 +167,7 @@ slice(ecom, 1:20)
 slice(ecom, n())
 ```
 
-----
-
-![](images/tally_canva.png)
+## {data-background="images/tally_canva.png"}
 
 ## Tabulate Referrers
 
@@ -223,9 +218,7 @@ ecom %>%
 count(ecom, referrer, purchase)
 ```
 
-----
-
-![](images/arrange_canva.png)
+## {data-background="images/arrange_canva.png"}
 
 ## Top 2 referrers by orders
 
@@ -258,7 +251,7 @@ mtcars %>%
   select(mpg, disp, cyl, gear, carb) %>%
   mutate(
     type = case_when(
-      disp > 200 ~ 'High',
+      disp > 300 ~ 'High',
       cyl == 8 ~ 'Eight',
       TRUE ~ 'True'
     )
@@ -273,13 +266,7 @@ mtcars %>%
 ecom %>%
   pull(referrer) %>%
   nth(1)
-```  
 
-## Select First Observation
-
-<hr>
-
-```{r dplyr21a}
 ecom %>%
   pull(referrer) %>%
   first()
@@ -305,9 +292,7 @@ ecom %>%
   last()
 ```
 
-----
-
-![](images/thankyou.png)
+## {data-background="images/thankyou.png"}
 
 <!-- To do: -->
 <!--   - explain case study data -->

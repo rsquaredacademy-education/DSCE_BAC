@@ -8,13 +8,11 @@ output: _output.yaml
 
 <hr>
 
-Use `dplyr` to:
-
-- select variables/columns
 - filter data
+- select variables/columns
 - arrange data
 - generate new variables
-- grouped summaries
+- create grouped summaries
 
 ## Introduction
 
@@ -23,12 +21,6 @@ Use `dplyr` to:
 According to  a [survey](http://visit.crowdflower.com/rs/416-ZBE-142/images/CrowdFlower_DataScienceReport_2016.pdf) by [CrowdFlower](https://www.crowdflower.com/), data scientists spend most of their time cleaning and manipulating data rather than mining or modeling them for insights. As such, it becomes important to have tools that make data manipulation faster and easier. In today's post, we introduce you to [dplyr](http://dplyr.tidyverse.org/), a grammar of data manipulation.
 
 ![survey](J:/workshops/DSCE_BAC/R/data-wrangling/images/crowd_flower3.png)
-
-## Why dplyr
-
-<hr>
-
-dplyr helps us solve the most common data manipulation challenges such as filtering rows, selecting columns, sorting data, creating new columns, summarizing data etc. In order to truly appreciate dplyr, we will compare it to the functions in base R.
 
 
 ## Libraries
@@ -62,7 +54,7 @@ dplyr provides a set of verbs that help us solve the most common data manipulati
 
 <hr>
 
-We will explore dummy data that we have created to resemble web logs of a ecommerce company. You can download the data from [here](https://github.com/rsquaredacademy/datasets/blob/master/web.csv) or import it directly using `read_csv()` from the [readr](readr.tidyverse.org) package. We will use dplyr to answer a few questions we have about the above data:
+We will explore dummy data that resembles web logs of an ecommerce company. You can download the data from [here](https://github.com/rsquaredacademy/datasets/blob/master/web.csv) or import it directly using `read_csv()` from the [readr](readr.tidyverse.org) package. We will use dplyr to answer a few questions we have about the above data:
 
 - what is the average order value by device types?
 - what is the average number of pages visited by purchasers and non-purchasers?
@@ -139,7 +131,7 @@ In order to compute the AOV, we must first separate the purchasers from non-purc
 
 ## {data-background="images/dplyr_filter_1_canva.png"}
 
-## Select all visits from mobile
+## Filter all visits from mobile
 
 <hr>
 
@@ -149,7 +141,7 @@ filter(ecom, device == "mobile")
 
 ## {data-background="images/dplyr_filter_2_canva.png"}
 
-## visits from mobile that converted
+## Visits from mobile that converted
 
 <hr>
 
@@ -157,7 +149,7 @@ filter(ecom, device == "mobile")
 filter(ecom, device == "mobile", purchase == "true")
 ```
 
-## from mobile & visited > 5 pages 
+## Visits from mobile & visited > 5 pages 
 
 <hr>
 
@@ -165,7 +157,7 @@ filter(ecom, device == "mobile", purchase == "true")
 filter(ecom, device == "mobile", n_pages > 5)
 ```
 
-## Case Study: visits that converted
+## Case Study: Visits that converted
 
 <hr>
 
@@ -191,7 +183,7 @@ select(ecom, device, purchase)
 
 ## {data-background="images/dplyr_select_2_canva.png"}
 
-## all columns from device to purchase
+## Select all columns from device to purchase
 
 <hr> 
 
@@ -201,7 +193,7 @@ select(ecom, device:purchase)
 
 ## {data-background="images/dplyr_select_3_canva.png"}
 
-## all columns excluding id and country
+## Select all columns excluding id and country
 
 <hr>
 
