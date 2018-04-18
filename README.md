@@ -62,7 +62,7 @@ Once you download the workshop materials, run the script (`package_download.R`) 
 
 -   [R Packages Installation Demo](https://vimeo.com/265157256)
 
-To test if a package has been correctly installed or not, type `library(packagename)` in the RStudio console. For example, to test if **readr** package has been installed, type `library(readr)` in the R console. If the package has not been installed correctly, you will get the following error message:
+To test if a package has been correctly installed or not, type `library(packagename)` in the RStudio console. For example, to test if **readr** package has been installed, type `library(readr)` in the RStudio console. If the package has not been installed correctly, you will get the following error message:
 
 `Error in library(readr) : there is no package called ‘readr’`
 
