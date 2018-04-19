@@ -1,0 +1,74 @@
+---
+output: _output.yaml
+---
+
+## {data-background="images/intro.png"}
+
+## {data-background="images/shistory.png"}
+
+## {data-background="images/ihaka.png"}
+
+## {data-background="images/rproject_canva.png"}
+
+## {data-background="images/rcran_canva.png"}
+
+## {data-background="images/rfoundation_canva.png"}
+
+## {data-background="images/rconsortium_canva.png"}
+
+## {data-background="images/ros_canva.png"}
+
+## {data-background="images/rpackage_distribution_canva.png"}
+
+## {data-background="images/rgui_canva.png"}
+
+## {data-background="images/rstudio_canva.png"}
+
+## {data-background="images/data_input_canva.png"}
+
+## {data-background="images/databases_canva.png"}
+
+## {data-background="images/databases2_canva.png"}
+
+## {data-background="images/dataviz_canva.png"}
+
+## {data-background="images/rmarkdown_canva.png"}
+
+## {data-background="images/shiny_canva.png"}
+
+## {data-background="images/cloud_canva.png"}
+
+## {data-background="images/stack_canva.png"}
+
+## {data-background="images/twitter_canva.png"}
+
+## {data-background="images/rblogger_canva.png"}
+
+## {data-background="images/rweekly_canva.png"}
+
+## {data-background="images/rstudio_communit_canva.png"}
+
+## {data-background="images/user_canva.png"}
+
+## {data-background="images/tidyverse_1_canva.png"}
+
+## {data-background="images/tidyverse_2_canva.png"}
+
+## {data-background="images/tidyverse_3_canva.png"}
+
+## {data-background="images/tidyverse_4_canva.png"}
+
+## {data-background="images/rhelp_canva.png"}
+
+## Quick Intro
+
+<hr>
+
+- RStudio Overview
+- Installing & Loading Packages
+- Using Documentation
+- Variables & Data Types
+
+## {data-background="images/thankyou.png"}
+
+
