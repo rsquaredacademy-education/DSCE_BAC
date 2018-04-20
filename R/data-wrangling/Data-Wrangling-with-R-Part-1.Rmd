@@ -61,6 +61,9 @@ We will explore dummy data that resembles web logs of an ecommerce company. You 
 - what is the average time on site for purchasers vs non-purchasers?
 - what is the average number of pages visited by purchasers and non-purchasers using mobile?
 
+## {data-background="images/variables_canva.png"}
+
+## {data-background="images/variable_component_canva.png"}
 
 ## Data
 

@@ -68,23 +68,6 @@ ds_multi_stats(mtcarz, mpg, disp, hp)
 
 <hr>
 
-```{r eda5}
-ds_freq_cont(mtcarz, mpg)
-```
-
-## Continuous Data
-
-<hr>
-
-```{r eda6, fig.width=4, fig.height=3, fig.align='center', echo=FALSE}
-k <- ds_freq_cont(mtcarz, mpg)
-plot(k)
-```
-
-## Continuous Data
-
-<hr>
-
 ```{r eda6a, fig.align='center', fig.width=4, fig.height=3}
 plot(ds_freq_cont(mtcarz, mpg))
 ```
