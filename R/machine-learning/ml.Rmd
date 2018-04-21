@@ -1,0 +1,239 @@
+---
+output: _output.yaml
+---
+
+## {data-background="images/intro.jpeg"}
+
+## Agenda
+
+<hr>
+
+- overview of most common techniques and applications
+- training of machine learning models
+- assessment or measuring the performance of the models
+- basic introduction to:
+    - classification
+    - regression
+    - clustering
+
+## Outcome
+
+<hr>
+
+- identify problems to be solved
+- use appropriate machine learning technique
+- interpret the results
+
+## {data-background="images/dtree_canva.png"}
+
+## {data-background="images/dtree_pizza_canva.png"}
+
+## {data-background="images/spam_canva.png"}
+
+## {data-background="images/formulation.png"}
+
+## {data-background="images/regression_canva.png"}
+
+## More Applications
+
+<hr>
+
+- shopping basket analysis
+- customer segmentations
+- image classification
+- text classification
+- recommender systems
+- credit risk scorecards
+- customer churn prediction
+- HR attrition analysis
+
+## {data-background="images/dtree_section.png"}
+
+## Decision Tree
+
+<hr>
+
+- simple to understand and interpret
+- requires little data preparation. (No need for normalization or dummy vars, works with NAs)
+- works with both numerical and categorical data.
+- possible to validate a model using statistical tests. 
+- robust - performs well even if you deviate from assumptions
+- scales to big data
+
+## Recursive Partitioning
+
+<hr>
+
+- given a subset of training data, find the best feature for predicting the labels on that subset.
+- find a split on that feature that best seperates the labels, and split into two new subsets
+- repeat steps one and two recursively until you meet a stopping criterion
+
+## Popular Algorithms
+
+<hr>
+
+- ID3 (Iterative Dichotomiser 3)
+- C4.5 (successor of ID3)
+- CART (Classification And Regression Tree)
+- CHAID (CHi-squared Automatic Interaction Detector). ...
+- MARS: extends decision trees to handle numerical data better.
+- Conditional Inference Trees.
+
+## Libraries
+
+<hr>
+
+```{r libs, message=FALSE}
+library(readr)
+library(dplyr)
+library(party)
+library(rpart)
+library(rpart.plot)
+```
+
+## Titanic Data
+
+<hr>
+
+Each row in the data is a passenger. Columns are features:
+
+- survived: 0 if died, 1 if survived
+- embarked: Port of Embarkation (Cherbourg, Queenstown,Southampton)
+- sex: Gender
+- sibsp: Number of Siblings/Spouses Aboard
+- parch: Number of Parents/Children Aboard
+- fare: Fare Payed
+
+## Read Data
+
+<hr>
+
+```{r import}
+titanic <- 
+  read_csv("data/titanic.txt") %>% # read in the data
+  select(survived, embarked, sex, 
+         sibsp, parch, fare) %>%
+  mutate(embarked = factor(embarked),
+         sex = factor(sex))
+```
+
+## Training & Test Data
+
+<hr>
+
+```{r split}
+data <- c("training", "test") %>%
+  sample(nrow(titanic), replace = T) %>%
+  split(titanic, .)
+
+train <- data$training
+test <- data$test
+```
+
+## Fit Tree
+
+<hr>
+
+```{r tree1, fig.align='center'}
+rtree_fit <- rpart(survived ~ ., data = train, method = "class") 
+rpart.plot(rtree_fit)
+```
+
+## {data-background="images/cluster_section.png"}
+
+## Cluster Analysis
+
+<hr>
+
+## iris 
+
+<hr>
+
+```{r setseed, echo=FALSE}
+set.seed(1)
+```
+
+
+```{r iris}
+iris
+```
+
+```{r iris1a, ech=FALSE}
+# remove the Species column
+iris2 <- iris[-5]
+```
+
+## Count of species
+
+<hr>
+
+```{r iris2}
+species <- iris$Species
+table(species)
+```
+
+## kmeans 
+
+<hr>
+
+```{r iris3}
+km_iris <- kmeans(iris2, 3)
+km_iris
+```
+
+## Compare Counts
+
+<hr>
+
+```{r iris4}
+table(km_iris$cluster, species)
+```
+
+## Clusters
+
+<hr>
+
+```{r iris5, fig.align='center'}
+plot(Petal.Length ~ Petal.Width, data = iris2, col = km_iris$cluster)
+```
+
+## mtcars
+
+<hr>
+
+```{r mtcars}
+mt <- select(mtcars, hp, wt)
+```
+
+## kmeans
+
+```{r mtcars2}
+km_mtcars <- kmeans(mt, 2)
+km_mtcars$cluster
+```
+
+## Clusters & Centroids
+
+```{r mtcars3, fig.align='center'}
+plot(mt, col = km_mtcars$cluster)
+points(km_mtcars$centers, pch = 22, bg = c(1, 2), cex = 2)
+```
+
+## {data-background="images/linear_section.png"}
+
+## Linear Regression
+
+- linear regression model
+- varaible selection procedures
+- residual diagnostics
+- multicollinearity
+- heteroskedasticity
+- prediction
+
+## Logistic Regression
+
+- bivariate analysis
+- logistic regression model
+- model fit statistics
+- variable selection procedures
+- model validation
