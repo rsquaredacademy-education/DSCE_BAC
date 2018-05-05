@@ -70,12 +70,12 @@ We will explore dummy data that resembles web logs of an ecommerce company. You 
 <hr>
 
 ```{r import, eval=FALSE}
-ecom <- read_csv('data/web.csv')
+ecom <- read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv')
 ```
 
 
 ```{r show, echo=FALSE, eval=TRUE, message=FALSE}
-ecom <- read_csv('data/web.csv')
+ecom <- read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv')
 ecom
 ```
 

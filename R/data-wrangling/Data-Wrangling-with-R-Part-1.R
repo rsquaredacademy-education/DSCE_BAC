@@ -6,7 +6,7 @@ library(readr)
 
 #-----------------------------------------------------------------------
 # read data 
-ecom <- read_csv('data/web.csv')
+ecom <- read_csv('https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv')
 ecom
 #-----------------------------------------------------------------------
 

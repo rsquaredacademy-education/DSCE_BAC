@@ -514,7 +514,7 @@ document.getElementsByTagName('head')[0].appendChild(style);
 <section id="data" class="slide level2">
 <h2>Data</h2>
 <hr>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ecom &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">'data/web.csv'</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ecom &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">'https://raw.githubusercontent.com/rsquaredacademy/datasets/master/web.csv'</span>)</code></pre></div>
 <pre><code>## # A tibble: 1,000 x 11
 ##       id referrer device bouncers n_visit n_pages duration country       
 ##    &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;      &lt;int&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;         
@@ -617,30 +617,30 @@ document.getElementsByTagName('head')[0].appendChild(style);
 <hr>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sample_n</span>(ecom, <span class="dt">size =</span> <span class="dv">700</span>)</code></pre></div>
 <pre><code>## # A tibble: 700 x 11
-##       id referrer device bouncers n_visit n_pages duration country      
-##    &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;      &lt;int&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;        
-##  1   876 direct   laptop false          4    2.00     44.0 United States
-##  2   933 google   mobile false          9    6.00     96.0 Portugal     
-##  3   526 yahoo    tablet false         10    9.00    153   Indonesia    
-##  4   959 direct   mobile false          1    9.00    135   Indonesia    
-##  5   749 bing     laptop false          0   17.0     272   Indonesia    
-##  6   425 yahoo    laptop false          2    7.00    105   Cyprus       
-##  7   242 bing     mobile false         10   13.0     221   China        
-##  8   756 yahoo    tablet false          6    8.00    224   France       
-##  9   341 bing     mobile false          5   15.0     405   Russia       
-## 10   495 google   laptop false          8   18.0     522   Japan        
+##       id referrer device bouncers n_visit n_pages duration country    
+##    &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;      &lt;int&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;      
+##  1   352 direct   tablet false          2   17.0     391   Ukraine    
+##  2   503 yahoo    mobile true           9    1.00    626   Indonesia  
+##  3   285 direct   mobile false          8   16.0     464   Indonesia  
+##  4   865 social   tablet true           1    1.00    609   Philippines
+##  5   462 yahoo    mobile true           7    1.00    561   Croatia    
+##  6   736 bing     tablet false          1   14.0     168   Israel     
+##  7   988 direct   laptop false          0   15.0     255   Indonesia  
+##  8   533 social   laptop false          9   14.0     224   China      
+##  9   113 yahoo    tablet false          7   16.0     224   Sri Lanka  
+## 10   232 social   laptop false          8    2.00     60.0 Afghanistan
 ##    purchase order_items order_value
 ##    &lt;chr&gt;          &lt;dbl&gt;       &lt;dbl&gt;
-##  1 false           8.00        1801
-##  2 false           8.00        1354
+##  1 true            3.00        2636
+##  2 false           0              0
 ##  3 false           0              0
 ##  4 false           0              0
-##  5 true            9.00        1384
-##  6 false          10.0         1912
+##  5 false           0              0
+##  6 false           0              0
 ##  7 false           0              0
-##  8 false           5.00         462
-##  9 true            7.00        2274
-## 10 true            8.00        2367
+##  8 false           9.00        2462
+##  9 false           3.00        1482
+## 10 false           0              0
 ## # ... with 690 more rows</code></pre>
 </section>
 <section id="sampling-data-1" class="slide level2">
@@ -648,30 +648,30 @@ document.getElementsByTagName('head')[0].appendChild(style);
 <hr>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sample_frac</span>(ecom, <span class="dt">size =</span> <span class="fl">0.7</span>)</code></pre></div>
 <pre><code>## # A tibble: 700 x 11
-##       id referrer device bouncers n_visit n_pages duration country      
-##    &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;      &lt;int&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;        
-##  1   772 social   mobile false          6    9.00    126   Norway       
-##  2    53 social   tablet false          3   12.0     324   China        
-##  3   733 google   laptop true           4    1.00    164   Russia       
-##  4   875 direct   laptop false          2    4.00     80.0 United States
-##  5   169 direct   laptop false          6    6.00     96.0 Albania      
-##  6   306 direct   mobile false          7    7.00     98.0 Philippines  
-##  7   442 direct   tablet true           3    1.00    632   Jamaica      
-##  8   217 google   mobile false          9    9.00    135   Poland       
-##  9   615 social   laptop true           1    1.00     10.0 Finland      
-## 10   684 yahoo    tablet true           5    1.00    386   China        
+##       id referrer device bouncers n_visit n_pages duration country       
+##    &lt;int&gt; &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;      &lt;int&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;         
+##  1   284 social   mobile true           9    1.00    803   Peru          
+##  2    51 direct   mobile true           9    1.00    898   China         
+##  3   742 google   mobile true           2    1.00    337   China         
+##  4   910 google   laptop false         10    4.00     60.0 Russia        
+##  5   439 google   tablet false          0   13.0     156   Chile         
+##  6   933 google   mobile false          9    6.00     96.0 Portugal      
+##  7   427 bing     tablet false          1   19.0     361   Czech Republic
+##  8    94 yahoo    tablet false          2   16.0     480   China         
+##  9   201 social   laptop false          7   15.0     210   Armenia       
+## 10   904 social   tablet true           9    1.00    509   Chile         
 ##    purchase order_items order_value
 ##    &lt;chr&gt;          &lt;dbl&gt;       &lt;dbl&gt;
-##  1 false           0              0
-##  2 false           0              0
-##  3 false           0              0
-##  4 false           0              0
-##  5 false           0              0
-##  6 false           9.00         632
-##  7 false           0              0
-##  8 false           4.00        1758
-##  9 false           0              0
-## 10 false           0              0
+##  1 false           0            0  
+##  2 false           0            0  
+##  3 false           0            0  
+##  4 false           0            0  
+##  5 false           9.00       969  
+##  6 false           8.00      1354  
+##  7 true            5.00        44.0
+##  8 true            9.00       286  
+##  9 false           0            0  
+## 10 false           0            0  
 ## # ... with 690 more rows</code></pre>
 </section>
 <section id="section-4" class="slide level2" data-background="images/pull_canva.png">

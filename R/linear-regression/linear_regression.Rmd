@@ -6,10 +6,6 @@ output: _output.yaml
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Agenda
-
-<hr>
-
 ## Libraries
 
 <hr>
